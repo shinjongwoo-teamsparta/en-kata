@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "~/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -70,6 +70,7 @@ export default function HomePage() {
   const [category, setCategory] = useState<WordCategory>("general");
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [focusIndex, setFocusIndex] = useState(0);
 
   const steps = useMemo(() => getSteps(mode), [mode]);
   const currentStep = steps[stepIndex] ?? "mode";
@@ -127,6 +128,81 @@ export default function HomePage() {
     if (mode === "word" && showHint) params.set("showHint", "true");
     router.push(`/play?${params.toString()}`);
   };
+
+  // Options count for the current step
+  const currentOptions = useMemo(() => {
+    switch (currentStep) {
+      case "mode":
+        return MODE_IDS;
+      case "duration":
+        return DURATIONS;
+      case "difficulty":
+        return DIFFICULTIES;
+      case "category":
+        return CATEGORY_IDS;
+      default:
+        return [];
+    }
+  }, [currentStep]);
+
+  // Reset focus index when step changes, default to currently selected value
+  useEffect(() => {
+    let idx = 0;
+    switch (currentStep) {
+      case "mode":
+        idx = MODE_IDS.indexOf(mode);
+        break;
+      case "duration":
+        idx = DURATIONS.indexOf(duration);
+        break;
+      case "difficulty":
+        idx = DIFFICULTIES.indexOf(difficulty);
+        break;
+      case "category":
+        idx = CATEGORY_IDS.indexOf(category);
+        break;
+    }
+    setFocusIndex(idx >= 0 ? idx : 0);
+  }, [currentStep, mode, duration, difficulty, category]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setFocusIndex((i) => (i > 0 ? i - 1 : currentOptions.length - 1));
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setFocusIndex((i) => (i < currentOptions.length - 1 ? i + 1 : 0));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        switch (currentStep) {
+          case "mode":
+            selectMode(MODE_IDS[focusIndex] ?? "word");
+            break;
+          case "duration":
+            setDuration(DURATIONS[focusIndex] ?? 60);
+            if (isLastStep) {
+              handleStart();
+            } else {
+              goNext();
+            }
+            break;
+          case "difficulty":
+            selectDifficulty(DIFFICULTIES[focusIndex] ?? "medium");
+            break;
+          case "category":
+            selectCategory(CATEGORY_IDS[focusIndex] ?? "general");
+            break;
+        }
+      } else if (e.key === "Backspace") {
+        e.preventDefault();
+        goBack();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentOptions, currentStep, focusIndex, isLastStep, goBack]);
 
   // Summary line showing current selections
   const summaryParts: string[] = [];
@@ -197,19 +273,19 @@ export default function HomePage() {
               {/* Mode step */}
               {currentStep === "mode" && (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  {MODE_IDS.map((m) => (
+                  {MODE_IDS.map((m, i) => (
                     <button
                       key={m}
                       onClick={() => selectMode(m)}
                       className={`rounded-lg border p-4 text-left transition-all ${
-                        mode === m
-                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)]"
+                        focusIndex === i
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
                       }`}
                     >
                       <div
                         className={`text-xl font-bold ${
-                          mode === m
+                          focusIndex === i
                             ? "text-[var(--color-primary)]"
                             : "text-[var(--color-text-dim)]"
                         }`}
@@ -230,13 +306,13 @@ export default function HomePage() {
               {/* Duration step */}
               {currentStep === "duration" && (
                 <div className="flex justify-center gap-4">
-                  {DURATIONS.map((d) => (
+                  {DURATIONS.map((d, i) => (
                     <button
                       key={d}
                       onClick={() => selectDuration(d)}
                       className={`rounded-lg border px-8 py-4 text-lg font-bold transition-all ${
-                        duration === d
-                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
+                        focusIndex === i
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
                       }`}
                     >
@@ -249,13 +325,13 @@ export default function HomePage() {
               {/* Difficulty step */}
               {currentStep === "difficulty" && (
                 <div className="flex justify-center gap-4">
-                  {DIFFICULTIES.map((d) => (
+                  {DIFFICULTIES.map((d, i) => (
                     <button
                       key={d}
                       onClick={() => selectDifficulty(d)}
                       className={`rounded-lg border px-8 py-4 text-lg font-medium transition-all ${
-                        difficulty === d
-                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
+                        focusIndex === i
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
                       }`}
                     >
@@ -268,13 +344,13 @@ export default function HomePage() {
               {/* Category step */}
               {currentStep === "category" && (
                 <div className="flex flex-wrap justify-center gap-3">
-                  {CATEGORY_IDS.map((c) => (
+                  {CATEGORY_IDS.map((c, i) => (
                     <button
                       key={c}
                       onClick={() => selectCategory(c)}
                       className={`rounded-lg border px-6 py-3 text-sm font-medium transition-all ${
-                        category === c
-                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
+                        focusIndex === i
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
                       }`}
                     >
