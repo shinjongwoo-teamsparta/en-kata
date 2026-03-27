@@ -1,5 +1,5 @@
 export type GameMode = "word" | "phrase" | "code" | "variableName";
-export type ShortCodeLanguage = "jsts" | "python";
+export type ShortCodeLanguage = "typescript" | "python";
 export type Difficulty = "easy" | "medium" | "hard";
 export type NamingConvention = "camelCase" | "snake_case" | "kebab-case" | "PascalCase";
 export type WordCategory = "general" | "frontend" | "backend" | "devops" | "database";

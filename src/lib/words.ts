@@ -91,9 +91,10 @@ export function getWords(
       return shuffle(phrases).map((p) => ({ display: p, target: p }));
     }
     case "code": {
-      const lang = language ?? "jsts";
-      const symbols =
-        (shortCodeData as Record<string, string[]>)[lang] ?? [];
+      const lang = language ?? "typescript";
+      const langData =
+        (shortCodeData as Record<string, { codes: string[] }>)[lang];
+      const symbols = langData?.codes ?? [];
       return shuffle(symbols).map((s) => ({ display: s, target: s }));
     }
     case "variableName": {

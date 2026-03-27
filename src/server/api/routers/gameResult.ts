@@ -15,7 +15,7 @@ export const gameResultRouter = createTRPCRouter({
         convention: z
           .enum(["camelCase", "snake_case", "kebab-case", "PascalCase"])
           .optional(),
-        language: z.enum(["jsts", "python"]).optional(),
+        language: z.enum(["typescript", "python"]).optional(),
         category: z
           .enum(["general", "frontend", "backend", "devops", "database"])
           .optional(),

@@ -28,7 +28,7 @@
     },
     "language": "language",
     "languages": {
-      "jsts": "JS / TS",
+      "typescript": "TypeScript",
       "python": "Python"
     },
     "categories": {

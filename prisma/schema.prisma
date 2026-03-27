@@ -66,7 +66,7 @@ model GameResult {
     difficulty     String   // easy | medium | hard
     duration       Int      // seconds
     convention     String?  // camelCase | snake_case | kebab-case | PascalCase
-    language       String?  // jsts | python
+    language       String?  // typescript | python
     category       String?  // general | frontend | backend | devops | database
 
     wpm            Int

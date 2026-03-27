@@ -35,7 +35,7 @@
 
 ### Short Code Mode (숏 코드)
 - 코드에서 자주 쓰이는 짧은 코드 조각 (5~25자)
-- 언어 선택: `JS/TS` | `Python`
+- 언어 선택: `TypeScript` | `Python`
 - 예 (JS/TS): `() => {}`, `Record<K, V>`, `a ?? b`, `JSON.parse()`
 - 예 (Python): `lambda x: x`, `__init__`, `[x for x in xs]`, `@property`
 - 난이도 없음 (medium 고정)
@@ -55,7 +55,7 @@
 | 시간 제한 | 30s / 60s / 120s | |
 | 난이도 | easy / medium / hard | shortCode, variableName 모드는 스킵 |
 | 카테고리 | general / frontend / backend / devops / database | word 모드 전용 |
-| 언어 | JS/TS / Python | shortCode 모드 전용 |
+| 언어 | TypeScript / Python | shortCode 모드 전용 |
 | 네이밍 컨벤션 | camelCase / snake_case / kebab-case / PascalCase | variableName 모드 전용, localStorage 저장 |
 | 어휘 힌트 | on / off | word 모드 전용, localStorage 저장 |
 | 키보드 사운드 | on / off | Web Audio API, localStorage 저장 |
@@ -112,7 +112,7 @@
 |------|------|
 | `words.json` | 카테고리별 × 난이도별 SW 단어 |
 | `phrases.json` | 난이도별 개발 문장 |
-| `short-codes.json` | 언어별(JS/TS, Python) 숏 코드 조각 |
+| `short-codes.json` | 언어별(TypeScript, Python) 숏 코드 조각 + 아이콘/라벨 메타데이터 |
 | `naming-phrases.json` | 네이밍 컨벤션 변환용 구문 |
 | `word-hints.json` | 단어 정의 & 사용 예시 (700+ 항목) |
 
@@ -159,7 +159,7 @@ AUTH_GITHUB_SECRET=     # GitHub OAuth App Secret
 - [x] 키보드 사운드 옵션 (Web Audio API)
 
 ### Phase 3
-- [ ] 리더보드
+- [x] 리더보드
 - [ ] 어휘집 분리
 - [ ] 사운드 에셋 추가
 - [ ] 멀티플레이어 (실시간 대전)

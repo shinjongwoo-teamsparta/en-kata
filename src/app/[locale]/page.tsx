@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "~/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import codeData from "~/data/short-codes.json";
 import type {
   Difficulty,
   GameMode,
@@ -22,23 +23,8 @@ const MODE_ICONS: Record<GameMode, string> = {
   variableName: "xY",
 };
 
-const LANGUAGE_IDS: ShortCodeLanguage[] = ["jsts", "python"];
-
-const LANGUAGE_ICONS: Record<string, React.ReactNode> = {
-  jsts: (
-    <Image src="/lang-typescript.svg" alt="TypeScript" width={20} height={20} />
-  ),
-  python: (
-    <Image src="/lang-python.svg" alt="Python" width={20} height={20} />
-  ),
-};
-
-const FallbackLanguageIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="16 18 22 12 16 6" />
-    <polyline points="8 6 2 12 8 18" />
-  </svg>
-);
+const LANGUAGE_IDS = Object.keys(codeData) as ShortCodeLanguage[];
+const LANGUAGE_META = codeData as Record<string, { label: string; icon: string; codes: string[] }>;
 
 const DURATIONS = [30, 60, 120];
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
@@ -104,7 +90,7 @@ export default function HomePage() {
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [category, setCategory] = useState<WordCategory>("general");
   const [convention, setConvention] = useState<NamingConvention>("camelCase");
-  const [language, setLanguage] = useState<ShortCodeLanguage>("jsts");
+  const [language, setLanguage] = useState<ShortCodeLanguage>("typescript");
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [focusIndex, setFocusIndex] = useState(0);
@@ -261,7 +247,7 @@ export default function HomePage() {
             selectConvention(CONVENTION_IDS[focusIndex] ?? "camelCase");
             break;
           case "language":
-            selectLanguage(LANGUAGE_IDS[focusIndex] ?? "jsts");
+            selectLanguage(LANGUAGE_IDS[focusIndex] ?? "typescript");
             break;
         }
       } else if (e.key === "Backspace") {
@@ -463,8 +449,10 @@ export default function HomePage() {
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
                         }`}
                     >
-                      {LANGUAGE_ICONS[l] ?? <FallbackLanguageIcon />}
-                      {t(`languages.${l}`)}
+                      {LANGUAGE_META[l]?.icon && (
+                        <Image src={LANGUAGE_META[l].icon} alt={LANGUAGE_META[l].label} width={20} height={20} />
+                      )}
+                      {LANGUAGE_META[l]?.label ?? l}
                     </button>
                   ))}
                 </div>
