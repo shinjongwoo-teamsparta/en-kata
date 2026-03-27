@@ -108,7 +108,7 @@ export default function HomePage() {
 
   const selectCategory = (c: WordCategory) => {
     setCategory(c);
-    // Don't auto-advance on last step, let user press Start
+    goNext();
   };
 
   const handleStart = () => {

@@ -1,29 +1,138 @@
-# Create T3 App
+# en-kata
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+소프트웨어 엔지니어를 위한 영어 타이핑 연습 게임.
+단순 타자 속도뿐 아니라 코드에서 자주 쓰이는 어휘·기호·네이밍 컨벤션을 빠르고 정확하게 입력하는 훈련이 목적.
 
-## What's next? How do I make an app with this?
+---
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Tech Stack
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+| Layer | Stack |
+|-------|-------|
+| Framework | Next.js 15 (App Router) + React 19 + TypeScript |
+| Styling | Tailwind CSS 4 + CSS Variables (Catppuccin Latte/Mocha) |
+| Animation | Framer Motion |
+| i18n | next-intl (en, ko) |
+| Font | Geist Mono |
+| DB | PostgreSQL + Prisma (준비됨, 아직 미사용) |
+| API | tRPC 11 (인프라 구축 완료, 게임에서는 미사용) |
+| Package Manager | pnpm |
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+---
 
-## Learn More
+## 게임 모드
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Word Mode (단어)
+- SW 엔지니어링 관련 단어를 하나씩 타이핑
+- 카테고리: `general` | `frontend` | `backend` | `devops` | `database`
+- 난이도: easy / medium / hard
+- 어휘 힌트 토글 (단어 정의 & 사용 예시)
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Phrase Mode (문장)
+- 개발 관련 문장 & 표현 타이핑
+- 난이도: easy / medium / hard
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### Symbol Mode (기호)
+- 코드에서 자주 쓰이는 기호 & 연산자
+- 예: `=>`, `===`, `!==`, `?.`, `() => {}`, `<T>`
+- 난이도 없음 (medium 고정)
 
-## How do I deploy this?
+### Variable Name Mode (변수명)
+- 화면에 설명 문구가 표시되면 선택한 네이밍 컨벤션으로 변환하여 입력
+- 컨벤션: `camelCase` | `snake_case` | `kebab-case` | `PascalCase`
+- 예: "get user profile" → `getUserProfile`
+- 난이도 없음 (medium 고정)
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+---
+
+## 게임 설정
+
+| 항목 | 옵션 | 비고 |
+|------|------|------|
+| 시간 제한 | 30s / 60s / 120s | |
+| 난이도 | easy / medium / hard | symbol, variableName 모드는 스킵 |
+| 카테고리 | general / frontend / backend / devops / database | word 모드 전용 |
+| 네이밍 컨벤션 | camelCase / snake_case / kebab-case / PascalCase | variableName 모드 전용, localStorage 저장 |
+| 어휘 힌트 | on / off | word 모드 전용, localStorage 저장 |
+| 테마 | Light / Dark / System | |
+| 언어 | English / 한국어 | |
+
+---
+
+## 페이지 구조
+
+```
+/[locale]/          → 게임 설정 (OPOA 스텝 위자드)
+/[locale]/play      → 타이핑 게임
+/[locale]/result    → 결과 화면
+```
+
+### 홈 (게임 설정)
+- 스텝별 위자드: Mode → 세부분류 → 난이도 → 시간
+- 모드에 따라 불필요한 스텝 자동 스킵
+- 슬라이드 애니메이션, 스텝 인디케이터, 선택 요약 표시
+
+### 게임 플레이
+- 글자 단위 실시간 정확/오류 피드백 (초록/빨강)
+- 애니메이션 커서
+- 실시간 WPM 계산
+- 카운트다운 타이머 (10초 이하 경고)
+- 다음 7개 단어 미리보기
+- 단어 소진 시 자동 추가 로드
+- ESC로 나가기
+
+### 결과 화면
+- WPM, CPM, 정확도(%), 완료 단어 수
+- 시간별 WPM 바 차트
+- 가장 많이 틀린 글자 Top 5
+- 같은 설정으로 재시도 / 설정 변경 버튼
+
+---
+
+## 데이터
+
+`src/data/` 에 JSON 파일로 관리 (빌드 타임 로드):
+
+| 파일 | 내용 |
+|------|------|
+| `words.json` | 카테고리별 × 난이도별 SW 단어 |
+| `phrases.json` | 난이도별 개발 문장 |
+| `symbols.json` | 난이도별 코드 기호 & 연산자 |
+| `naming-phrases.json` | 네이밍 컨벤션 변환용 구문 |
+| `word-hints.json` | 단어 정의 & 사용 예시 (700+ 항목) |
+
+---
+
+## 아키텍처
+
+- **클라이언트 중심**: 게임 로직 전체가 브라우저에서 실행
+- **URL 파라미터 기반**: 게임 설정은 query params로 전달, 결과도 인코딩하여 URL로 전달
+- **Stateless**: 서버 사이드 데이터 저장 없음 (DB 인프라는 준비됨)
+- **완전한 i18n**: UI 전체 영어/한국어 지원
+- **테마 시스템**: Catppuccin 팔레트 기반 Light/Dark 모드
+
+---
+
+## 로컬 개발
+
+```bash
+pnpm install
+pnpm dev
+```
+
+http://localhost:3000 에서 실행.
+
+---
+
+## Roadmap
+
+### Phase 2
+- [ ] GitHub OAuth 로그인 (NextAuth)
+- [ ] 게임 결과 DB 저장 (Prisma + PostgreSQL)
+- [ ] 통계 대시보드 (일별/주별 WPM 추이, 모드별 최고 기록)
+- [ ] 키보드 사운드 옵션
+
+### Phase 3
+- [ ] 리더보드
+- [ ] 커스텀 단어장
+- [ ] 멀티플레이어 (실시간 대전)
