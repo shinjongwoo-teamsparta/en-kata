@@ -1,0 +1,44 @@
+{
+  "easy": [
+    "=>", "===", "!==", "!=", "==", ">=", "<=", "&&", "||", "++", "--",
+    "+=", "-=", "*=", "/=", "%=", "??", "?.", "!!", "::", "->", "<>",
+    "[]", "{}", "()", "//", "/*", "*/", "##", "**", "..", "...",
+    "$_", "@_", "#!", "/^", "$/", "~>", "|>", "<|", "&=", "|=",
+    "<<", ">>", "^=", "~=", "<-", ":=", ">>>", "<<=", ">>=", "?.?"
+  ],
+  "medium": [
+    "() => {}", "(...args)", "[...arr]", "{...obj}", "<T>(x: T)",
+    "Record<K, V>", "Map<K, V>", "Set<T>", "Array<T>", "Promise<T>",
+    "Partial<T>", "Required<T>", "Readonly<T>", "Pick<T, K>", "Omit<T, K>",
+    "${value}", "`${a}_${b}`", "?.optional", "!.nonNull", "as const",
+    "[key: string]", "{ [P in K]: T }", "keyof typeof", "typeof obj",
+    "a ?? b", "a?.b?.c", "x! as T", "fn?.()", "obj?.['key']",
+    "void 0", "~index", "+str", "a ** b", "a >>> 0",
+    "import()", "export {}", "require()", "module.exports",
+    "#private", "@decorator", "@Injectable()", "@Column()",
+    "/regex/gi", "/^start$/m", "new Map()", "new Set()",
+    "JSON.parse()", "JSON.stringify()", "Object.keys()", "Object.entries()",
+    "Array.from()", "Array.isArray()", "Number.isNaN()", "String.raw``"
+  ],
+  "hard": [
+    "type Result<T, E = Error>", "interface Config extends Base",
+    "const fn = <T extends object>(x: T): T => x",
+    "export type { Props as ComponentProps }",
+    "declare module '*.svg' { const c: string; export default c; }",
+    "type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> }",
+    "type Awaited<T> = T extends Promise<infer U> ? Awaited<U> : T",
+    "const [state, setState] = useState<T | null>(null)",
+    "useCallback(() => fn(a, b), [a, b])",
+    "useMemo(() => compute(data), [data])",
+    "useEffect(() => { sub(); return () => unsub(); }, [])",
+    "app.use((req, res, next) => { next(); })",
+    "router.get('/:id', async (req, res) => {})",
+    "Promise.all([fetchA(), fetchB()]).then(([a, b]) => {})",
+    "Object.fromEntries(Object.entries(obj).filter(([k]) => k))",
+    "arr.reduce<Record<string, T>>((acc, item) => ({...acc}), {})",
+    "new Proxy(target, { get: (obj, prop) => obj[prop] })",
+    "for await (const chunk of stream) { process(chunk); }",
+    "catch (err) { if (err instanceof TypeError) throw err; }",
+    "switch (action.type) { case 'SET': return { ...state }; }"
+  ]
+}

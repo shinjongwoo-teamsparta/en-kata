@@ -1,0 +1,2 @@
+- use Korean for documentation overall
+  - except, git commit title must be English

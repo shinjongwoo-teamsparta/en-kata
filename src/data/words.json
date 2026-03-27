@@ -1,0 +1,145 @@
+{
+  "general": {
+    "easy": [
+      "bug", "fix", "log", "run", "test", "code", "push", "pull", "merge", "branch",
+      "clone", "build", "debug", "error", "input", "output", "class", "type", "node",
+      "data", "file", "path", "port", "host", "loop", "array", "queue", "stack", "heap",
+      "hash", "tree", "sort", "sync", "pipe", "flag", "hook", "mock", "stub", "lint",
+      "diff", "grep", "curl", "bash", "yaml", "json", "null", "void", "enum", "cast",
+      "bind", "call", "emit", "load", "dump", "seed", "shard", "blob", "chunk", "cache",
+      "cron", "fork", "exec", "args", "opts", "init", "exit", "kill", "ping", "poll"
+    ],
+    "medium": [
+      "algorithm", "function", "variable", "constant", "parameter", "argument",
+      "callback", "promise", "iterator", "generator", "decorator", "interface",
+      "abstract", "instance", "compiler", "runtime", "debugger", "profiler",
+      "refactor", "optimize", "validate", "sanitize", "serialize", "throttle",
+      "debounce", "memoize", "dispatch", "navigate", "redirect", "authenticate",
+      "authorize", "encrypt", "decrypt", "compress", "decompress", "benchmark",
+      "bootstrap", "configure", "dependency", "injection", "singleton", "observer",
+      "strategy", "registry", "resolver", "provider", "consumer", "producer",
+      "listener", "handler", "middleware", "pipeline", "workflow", "template",
+      "scaffold", "rollback", "snapshot", "payload", "endpoint", "protocol",
+      "response", "request", "session", "timeout", "interval", "trigger",
+      "mutation", "selector", "reducer", "context", "fragment", "component"
+    ],
+    "hard": [
+      "authentication", "authorization", "idempotent", "asynchronous", "synchronization",
+      "serialization", "deserialization", "polymorphism", "encapsulation", "abstraction",
+      "inheritance", "microservice", "orchestration", "containerization", "virtualization",
+      "infrastructure", "observability", "vulnerability", "implementation", "configuration",
+      "transpilation", "interpolation", "concatenation", "normalization", "denormalization",
+      "parallelization", "multithreading", "concurrency", "deterministic", "nondeterministic",
+      "backward-compatible", "cross-platform", "event-driven", "fault-tolerant", "high-availability",
+      "load-balancing", "rate-limiting", "service-mesh", "blue-green-deployment", "canary-release",
+      "circuit-breaker", "dead-letter-queue", "eventual-consistency", "optimistic-locking",
+      "pessimistic-locking", "connection-pooling", "garbage-collection", "memory-allocation",
+      "stack-overflow", "buffer-overflow", "race-condition", "deadlock-prevention"
+    ]
+  },
+  "frontend": {
+    "easy": [
+      "dom", "css", "jsx", "tsx", "svg", "html", "prop", "ref", "key", "slot",
+      "grid", "flex", "font", "icon", "link", "form", "blur", "click", "hover",
+      "focus", "modal", "toast", "theme", "style", "query", "route", "state",
+      "store", "event", "fetch", "hydrate", "render", "mount", "layout", "page"
+    ],
+    "medium": [
+      "component", "directive", "template", "lifecycle", "suspense", "hydration",
+      "virtual-dom", "shadow-dom", "web-component", "responsive", "animation",
+      "transition", "transform", "viewport", "breakpoint", "container",
+      "accordion", "carousel", "dropdown", "tooltip", "popover", "skeleton",
+      "breadcrumb", "pagination", "navigation", "sidebar", "dashboard",
+      "debounce", "throttle", "intersection", "mutation-observer", "resize-observer",
+      "service-worker", "progressive", "accessible", "semantic", "composable"
+    ],
+    "hard": [
+      "server-side-rendering", "static-site-generation", "incremental-static-regeneration",
+      "client-side-rendering", "progressive-enhancement", "graceful-degradation",
+      "tree-shaking", "code-splitting", "lazy-loading", "prefetching",
+      "content-security-policy", "cross-origin-resource-sharing", "web-accessibility",
+      "internationalization", "localization", "stale-while-revalidate",
+      "optimistic-update", "concurrent-rendering", "streaming-server-rendering",
+      "react-server-component", "partial-hydration", "island-architecture"
+    ]
+  },
+  "backend": {
+    "easy": [
+      "api", "rest", "crud", "sql", "orm", "jwt", "auth", "cors", "csrf",
+      "rpc", "tcp", "udp", "dns", "ssl", "tls", "ssh", "ftp", "smtp",
+      "redis", "mongo", "nginx", "kafka", "grpc", "graphql", "schema",
+      "query", "index", "table", "model", "route", "guard", "scope", "role"
+    ],
+    "medium": [
+      "middleware", "controller", "repository", "migration", "transaction",
+      "connection", "websocket", "streaming", "pagination", "filtering",
+      "caching", "session", "cookie", "header", "payload", "response",
+      "request", "endpoint", "resolver", "validator", "interceptor",
+      "serializer", "deserializer", "scheduler", "worker", "consumer",
+      "producer", "publisher", "subscriber", "broadcast", "multicast",
+      "database", "replication", "sharding", "partitioning", "indexing"
+    ],
+    "hard": [
+      "distributed-system", "message-queue", "event-sourcing", "command-query-separation",
+      "domain-driven-design", "hexagonal-architecture", "clean-architecture",
+      "microservice-architecture", "service-oriented-architecture", "monolithic-architecture",
+      "database-normalization", "query-optimization", "connection-pooling",
+      "horizontal-scaling", "vertical-scaling", "auto-scaling",
+      "rolling-deployment", "zero-downtime-deployment", "database-migration",
+      "backward-compatibility", "api-versioning", "rate-limiting-algorithm"
+    ]
+  },
+  "devops": {
+    "easy": [
+      "git", "ci", "cd", "pod", "log", "env", "ssh", "aws", "gcp", "ecs",
+      "ecr", "vpc", "iam", "s3", "sqs", "sns", "rds", "eks", "aks", "helm",
+      "yaml", "toml", "bash", "cron", "swap", "disk", "cpu", "ram", "node",
+      "image", "layer", "build", "stage", "agent", "runner", "vault"
+    ],
+    "medium": [
+      "container", "docker", "kubernetes", "pipeline", "artifact", "registry",
+      "deployment", "rollback", "scaling", "monitoring", "alerting", "logging",
+      "tracing", "dashboard", "incident", "runbook", "playbook", "terraform",
+      "ansible", "cloudformation", "infrastructure", "provision", "configure",
+      "orchestrate", "namespace", "cluster", "service-mesh", "ingress",
+      "load-balancer", "auto-scaling", "health-check", "readiness-probe",
+      "liveness-probe", "config-map", "secret-manager", "certificate"
+    ],
+    "hard": [
+      "infrastructure-as-code", "continuous-integration", "continuous-deployment",
+      "continuous-delivery", "immutable-infrastructure", "declarative-configuration",
+      "gitops-workflow", "observability-platform", "distributed-tracing",
+      "chaos-engineering", "disaster-recovery", "business-continuity",
+      "multi-region-deployment", "cross-account-access", "least-privilege-principle",
+      "network-segmentation", "zero-trust-architecture", "service-level-objective",
+      "service-level-agreement", "mean-time-to-recovery", "mean-time-between-failures"
+    ]
+  },
+  "database": {
+    "easy": [
+      "row", "col", "key", "sql", "join", "view", "lock", "read", "write",
+      "drop", "alter", "grant", "index", "table", "query", "count", "group",
+      "order", "limit", "where", "from", "into", "null", "blob", "text",
+      "date", "uuid", "enum", "bool", "json", "char", "float", "cursor"
+    ],
+    "medium": [
+      "primary-key", "foreign-key", "composite-key", "unique-constraint",
+      "check-constraint", "default-value", "auto-increment", "timestamp",
+      "migration", "rollback", "transaction", "isolation", "consistency",
+      "durability", "atomicity", "replication", "partition", "sharding",
+      "materialized-view", "stored-procedure", "trigger", "function",
+      "aggregate", "subquery", "common-table-expression", "window-function",
+      "full-text-search", "geospatial-index", "connection-pool", "deadlock"
+    ],
+    "hard": [
+      "database-normalization", "denormalization-strategy", "optimistic-concurrency",
+      "pessimistic-concurrency", "multi-version-concurrency-control",
+      "write-ahead-logging", "point-in-time-recovery", "incremental-backup",
+      "read-replica-configuration", "master-slave-replication",
+      "eventual-consistency-model", "strong-consistency-guarantee",
+      "cap-theorem-tradeoff", "acid-compliance", "base-properties",
+      "horizontal-partitioning", "vertical-partitioning", "query-execution-plan",
+      "index-optimization-strategy", "database-connection-pooling"
+    ]
+  }
+}
