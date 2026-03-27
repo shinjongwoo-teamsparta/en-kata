@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "~/i18n/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import type {
   Difficulty,
   GameMode,
@@ -12,7 +13,7 @@ import type {
 const MODE_IDS: GameMode[] = ["word", "phrase", "symbol", "variableName"];
 const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
-  phrase: "\"\"",
+  phrase: '""',
   symbol: "{}",
   variableName: "xY",
 };
@@ -27,21 +28,98 @@ const CATEGORY_IDS: WordCategory[] = [
   "database",
 ];
 
+// Modes that skip the difficulty step
+const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["symbol", "variableName"]);
+
+type StepId = "mode" | "duration" | "difficulty" | "category";
+
+function getSteps(mode: GameMode): StepId[] {
+  const steps: StepId[] = ["mode"];
+  if (mode === "word") {
+    steps.push("category");
+  }
+  if (!MODES_WITHOUT_DIFFICULTY.has(mode)) {
+    steps.push("difficulty");
+  }
+  steps.push("duration");
+  return steps;
+}
+
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 80 : -80,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -80 : 80,
+    opacity: 0,
+  }),
+};
+
 export default function HomePage() {
   const t = useTranslations("home");
   const router = useRouter();
+
   const [mode, setMode] = useState<GameMode>("word");
   const [duration, setDuration] = useState(60);
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [category, setCategory] = useState<WordCategory>("general");
+  const [stepIndex, setStepIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  const steps = useMemo(() => getSteps(mode), [mode]);
+  const currentStep = steps[stepIndex] ?? "mode";
+  const isLastStep = stepIndex === steps.length - 1;
+
+  const goNext = useCallback(() => {
+    if (!isLastStep) {
+      setDirection(1);
+      setStepIndex((i) => i + 1);
+    }
+  }, [isLastStep]);
+
+  const goBack = useCallback(() => {
+    if (stepIndex > 0) {
+      setDirection(-1);
+      setStepIndex((i) => i - 1);
+    }
+  }, [stepIndex]);
+
+  const selectMode = (m: GameMode) => {
+    setMode(m);
+    // Reset step index to 1 (next step after mode)
+    setDirection(1);
+    setStepIndex(1);
+  };
+
+  const selectDuration = (d: number) => {
+    setDuration(d);
+    goNext();
+  };
+
+  const selectDifficulty = (d: Difficulty) => {
+    setDifficulty(d);
+    goNext();
+  };
+
+  const selectCategory = (c: WordCategory) => {
+    setCategory(c);
+    // Don't auto-advance on last step, let user press Start
+  };
+
   const handleStart = () => {
     const params = new URLSearchParams({
       mode,
       duration: duration.toString(),
-      difficulty,
+      difficulty: MODES_WITHOUT_DIFFICULTY.has(mode) ? "medium" : difficulty,
     });
     if (mode === "variableName") {
-      const convention = localStorage.getItem("namingConvention") ?? "camelCase";
+      const convention =
+        localStorage.getItem("namingConvention") ?? "camelCase";
       params.set("convention", convention);
     }
     if (mode === "word") params.set("category", category);
@@ -50,128 +128,188 @@ export default function HomePage() {
     router.push(`/play?${params.toString()}`);
   };
 
+  // Summary line showing current selections
+  const summaryParts: string[] = [];
+  if (stepIndex > 0) summaryParts.push(t(`modes.${mode}`));
+  if (stepIndex > 1) summaryParts.push(`${duration}s`);
+  if (
+    stepIndex > 2 &&
+    steps.includes("difficulty") &&
+    steps.indexOf("difficulty") < stepIndex
+  ) {
+    summaryParts.push(t(`difficulties.${difficulty}`));
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4">
-      <div className="w-full max-w-2xl space-y-10">
+      <div className="w-full max-w-2xl">
         {/* Title */}
-        <div className="text-center">
+        <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold text-[var(--color-text-bright)]">
             {t("title")}
           </h1>
           <p className="mt-2 text-[var(--color-text-dim)]">{t("subtitle")}</p>
         </div>
 
-        {/* Mode Selection */}
-        <div className="space-y-3">
-          <label className="text-sm text-[var(--color-text-dim)]">
-            {t("mode")}
-          </label>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {MODE_IDS.map((m) => (
-              <button
-                key={m}
-                onClick={() => setMode(m)}
-                className={`rounded-lg border p-4 text-left transition-all ${
-                  mode === m
-                    ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)]"
-                    : "border-[var(--color-border)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                }`}
-              >
-                <div
-                  className={`text-xl font-bold ${
-                    mode === m
-                      ? "text-[var(--color-primary)]"
-                      : "text-[var(--color-text-dim)]"
-                  }`}
-                >
-                  {MODE_ICONS[m]}
-                </div>
-                <div className="mt-1 text-sm font-medium text-[var(--color-text-bright)]">
-                  {t(`modes.${m}`)}
-                </div>
-                <div className="mt-0.5 text-xs text-[var(--color-text-dim)]">
-                  {t(`modes.${m}Desc`)}
-                </div>
-              </button>
-            ))}
-          </div>
+        {/* Step indicator */}
+        <div className="mb-8 flex items-center justify-center gap-2">
+          {steps.map((_, i) => (
+            <div
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === stepIndex
+                  ? "w-8 bg-[var(--color-primary)]"
+                  : i < stepIndex
+                    ? "w-4 bg-[var(--color-primary)] opacity-40"
+                    : "w-4 bg-[var(--color-border)]"
+              }`}
+            />
+          ))}
         </div>
 
-        {/* Duration */}
-        <div className="space-y-3">
-          <label className="text-sm text-[var(--color-text-dim)]">
-            {t("duration")}
-          </label>
-          <div className="flex gap-3">
-            {DURATIONS.map((d) => (
-              <button
-                key={d}
-                onClick={() => setDuration(d)}
-                className={`rounded-lg border px-5 py-2.5 text-sm font-medium transition-all ${
-                  duration === d
-                    ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
-                    : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)]"
-                }`}
-              >
-                {d}s
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Difficulty */}
-        <div className="space-y-3">
-          <label className="text-sm text-[var(--color-text-dim)]">
-            {t("difficulty")}
-          </label>
-          <div className="flex gap-3">
-            {DIFFICULTIES.map((d) => (
-              <button
-                key={d}
-                onClick={() => setDifficulty(d)}
-                className={`rounded-lg border px-5 py-2.5 text-sm font-medium transition-all ${
-                  difficulty === d
-                    ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
-                    : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)]"
-                }`}
-              >
-                {t(`difficulties.${d}`)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Category (Word mode only) */}
-        {mode === "word" && (
-          <div className="space-y-3">
-            <label className="text-sm text-[var(--color-text-dim)]">
-              {t("category")}
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {CATEGORY_IDS.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setCategory(c)}
-                  className={`rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
-                    category === c
-                      ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
-                      : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)]"
-                  }`}
-                >
-                  {t(`categories.${c}`)}
-                </button>
-              ))}
-            </div>
+        {/* Summary breadcrumb */}
+        {summaryParts.length > 0 && (
+          <div className="mb-6 text-center">
+            <span className="text-sm text-[var(--color-text-dim)]">
+              {summaryParts.join(" · ")}
+            </span>
           </div>
         )}
 
-        {/* Start Button */}
-        <button
-          onClick={handleStart}
-          className="w-full rounded-lg bg-[var(--color-primary)] py-3.5 text-lg font-bold text-[var(--color-bg)] transition-colors hover:bg-[var(--color-primary-hover)]"
-        >
-          {t("start")}
-        </button>
+        {/* Step content */}
+        <div className="relative min-h-[280px]">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={currentStep}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="space-y-4"
+            >
+              {/* Step label */}
+              <label className="block text-center text-sm font-medium text-[var(--color-text-dim)]">
+                {t(currentStep === "mode" ? "mode" : currentStep)}
+              </label>
+
+              {/* Mode step */}
+              {currentStep === "mode" && (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {MODE_IDS.map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => selectMode(m)}
+                      className={`rounded-lg border p-4 text-left transition-all ${
+                        mode === m
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)]"
+                          : "border-[var(--color-border)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
+                      }`}
+                    >
+                      <div
+                        className={`text-xl font-bold ${
+                          mode === m
+                            ? "text-[var(--color-primary)]"
+                            : "text-[var(--color-text-dim)]"
+                        }`}
+                      >
+                        {MODE_ICONS[m]}
+                      </div>
+                      <div className="mt-1 text-sm font-medium text-[var(--color-text-bright)]">
+                        {t(`modes.${m}`)}
+                      </div>
+                      <div className="mt-0.5 text-xs text-[var(--color-text-dim)]">
+                        {t(`modes.${m}Desc`)}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Duration step */}
+              {currentStep === "duration" && (
+                <div className="flex justify-center gap-4">
+                  {DURATIONS.map((d) => (
+                    <button
+                      key={d}
+                      onClick={() => selectDuration(d)}
+                      className={`rounded-lg border px-8 py-4 text-lg font-bold transition-all ${
+                        duration === d
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
+                          : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
+                      }`}
+                    >
+                      {d}s
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Difficulty step */}
+              {currentStep === "difficulty" && (
+                <div className="flex justify-center gap-4">
+                  {DIFFICULTIES.map((d) => (
+                    <button
+                      key={d}
+                      onClick={() => selectDifficulty(d)}
+                      className={`rounded-lg border px-8 py-4 text-lg font-medium transition-all ${
+                        difficulty === d
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
+                          : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
+                      }`}
+                    >
+                      {t(`difficulties.${d}`)}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Category step */}
+              {currentStep === "category" && (
+                <div className="flex flex-wrap justify-center gap-3">
+                  {CATEGORY_IDS.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => selectCategory(c)}
+                      className={`rounded-lg border px-6 py-3 text-sm font-medium transition-all ${
+                        category === c
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)]"
+                          : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
+                      }`}
+                    >
+                      {t(`categories.${c}`)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Navigation */}
+        <div className="mt-8 flex items-center justify-between">
+          <button
+            onClick={goBack}
+            className={`rounded-lg px-5 py-2.5 text-sm font-medium text-[var(--color-text-dim)] transition-all hover:text-[var(--color-text-bright)] ${
+              stepIndex === 0 ? "invisible" : ""
+            }`}
+          >
+            ← {t("back")}
+          </button>
+
+          {isLastStep ? (
+            <button
+              onClick={handleStart}
+              className="rounded-lg bg-[var(--color-primary)] px-10 py-3 text-lg font-bold text-[var(--color-bg)] transition-colors hover:bg-[var(--color-primary-hover)]"
+            >
+              {t("start")}
+            </button>
+          ) : (
+            // Spacer to keep layout balanced when no start button
+            <div />
+          )}
+        </div>
       </div>
     </main>
   );

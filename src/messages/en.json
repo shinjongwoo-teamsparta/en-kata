@@ -9,6 +9,7 @@
     "convention": "convention",
     "showHint": "Vocabulary Hints",
     "showHintDesc": "Show definition & example for each word",
+    "back": "Back",
     "start": "Start Typing",
     "modes": {
       "word": "Word",
