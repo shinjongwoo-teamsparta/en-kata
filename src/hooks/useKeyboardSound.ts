@@ -4,19 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export type SoundPresetId = "soft" | "mechanical" | "retro" | "minimal";
 
-interface SoundConfig {
-  type: OscillatorType;
-  frequency: number;
-  duration: number;
-  volume: number;
-}
-
-interface SoundPreset {
-  normal: SoundConfig;
-  error: SoundConfig;
-  complete: [SoundConfig, SoundConfig];
-}
-
 export const SOUND_PRESET_IDS: SoundPresetId[] = [
   "soft",
   "mechanical",
@@ -24,65 +11,108 @@ export const SOUND_PRESET_IDS: SoundPresetId[] = [
   "minimal",
 ];
 
-const SOUND_PRESETS: Record<SoundPresetId, SoundPreset> = {
+interface PresetFiles {
+  keys: string[];
+  error: string;
+  complete: string;
+  volume: number;
+}
+
+const PRESET_CONFIG: Record<SoundPresetId, PresetFiles> = {
   soft: {
-    normal: { type: "sine", frequency: 800, duration: 0.05, volume: 0.03 },
-    error: { type: "sine", frequency: 300, duration: 0.08, volume: 0.04 },
-    complete: [
-      { type: "sine", frequency: 600, duration: 0.08, volume: 0.03 },
-      { type: "sine", frequency: 900, duration: 0.08, volume: 0.03 },
+    keys: [
+      "/sounds/soft/key1.mp3",
+      "/sounds/soft/key2.mp3",
+      "/sounds/soft/key3.mp3",
+      "/sounds/soft/key4.mp3",
     ],
+    error: "/sounds/soft/error.mp3",
+    complete: "/sounds/soft/complete.mp3",
+    volume: 0.6,
   },
   mechanical: {
-    normal: { type: "square", frequency: 400, duration: 0.03, volume: 0.02 },
-    error: { type: "square", frequency: 150, duration: 0.06, volume: 0.03 },
-    complete: [
-      { type: "square", frequency: 500, duration: 0.05, volume: 0.025 },
-      { type: "square", frequency: 700, duration: 0.05, volume: 0.025 },
+    keys: [
+      "/sounds/mechanical/key1.mp3",
+      "/sounds/mechanical/key2.mp3",
+      "/sounds/mechanical/key3.mp3",
+      "/sounds/mechanical/key4.mp3",
     ],
+    error: "/sounds/mechanical/error.mp3",
+    complete: "/sounds/mechanical/complete.mp3",
+    volume: 0.5,
   },
   retro: {
-    normal: { type: "sawtooth", frequency: 660, duration: 0.04, volume: 0.02 },
-    error: { type: "sawtooth", frequency: 220, duration: 0.07, volume: 0.03 },
-    complete: [
-      { type: "sawtooth", frequency: 440, duration: 0.06, volume: 0.025 },
-      { type: "sawtooth", frequency: 880, duration: 0.06, volume: 0.025 },
+    keys: [
+      "/sounds/retro/key1.mp3",
+      "/sounds/retro/key2.mp3",
+      "/sounds/retro/key3.mp3",
+      "/sounds/retro/key4.mp3",
     ],
+    error: "/sounds/retro/error.mp3",
+    complete: "/sounds/retro/complete.mp3",
+    volume: 0.5,
   },
   minimal: {
-    normal: { type: "triangle", frequency: 1000, duration: 0.03, volume: 0.02 },
-    error: { type: "triangle", frequency: 350, duration: 0.05, volume: 0.025 },
-    complete: [
-      { type: "triangle", frequency: 700, duration: 0.05, volume: 0.02 },
-      { type: "triangle", frequency: 1050, duration: 0.05, volume: 0.02 },
+    keys: [
+      "/sounds/minimal/key1.mp3",
+      "/sounds/minimal/key2.mp3",
+      "/sounds/minimal/key3.mp3",
+      "/sounds/minimal/key4.mp3",
     ],
+    error: "/sounds/minimal/error.mp3",
+    complete: "/sounds/minimal/complete.mp3",
+    volume: 0.6,
   },
 };
 
-function createBeep(
-  audioCtx: AudioContext,
-  frequency: number,
-  duration: number,
+interface SoundBuffers {
+  keys: AudioBuffer[];
+  error: AudioBuffer;
+  complete: AudioBuffer;
+}
+
+const bufferCache = new Map<SoundPresetId, SoundBuffers>();
+
+async function loadBuffer(
+  ctx: AudioContext,
+  url: string,
+): Promise<AudioBuffer> {
+  const res = await fetch(url);
+  const arrayBuffer = await res.arrayBuffer();
+  return ctx.decodeAudioData(arrayBuffer);
+}
+
+async function loadPresetBuffers(
+  ctx: AudioContext,
+  presetId: SoundPresetId,
+): Promise<SoundBuffers> {
+  const cached = bufferCache.get(presetId);
+  if (cached) return cached;
+
+  const config = PRESET_CONFIG[presetId];
+  const [keys, error, complete] = await Promise.all([
+    Promise.all(config.keys.map((url) => loadBuffer(ctx, url))),
+    loadBuffer(ctx, config.error),
+    loadBuffer(ctx, config.complete),
+  ]);
+
+  const buffers: SoundBuffers = { keys, error, complete };
+  bufferCache.set(presetId, buffers);
+  return buffers;
+}
+
+function playBuffer(
+  ctx: AudioContext,
+  buffer: AudioBuffer,
   volume: number,
-  type: OscillatorType = "sine",
-) {
-  const oscillator = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
-
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-
-  oscillator.frequency.value = frequency;
-  oscillator.type = type;
-
-  gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(
-    0.001,
-    audioCtx.currentTime + duration,
-  );
-
-  oscillator.start(audioCtx.currentTime);
-  oscillator.stop(audioCtx.currentTime + duration);
+): void {
+  const source = ctx.createBufferSource();
+  const gain = ctx.createGain();
+  source.buffer = buffer;
+  gain.gain.value = volume;
+  source.connect(gain);
+  gain.connect(ctx.destination);
+  source.start(0);
 }
 
 function isValidPreset(value: string | null): value is SoundPresetId {
@@ -93,7 +123,20 @@ export function useKeyboardSound() {
   const [enabled, setEnabled] = useState(false);
   const [preset, setPresetState] = useState<SoundPresetId>("soft");
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const buffersRef = useRef<SoundBuffers | null>(null);
+  const keyIndexRef = useRef(0);
 
+  const getAudioCtx = useCallback(() => {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new AudioContext();
+    }
+    if (audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume();
+    }
+    return audioCtxRef.current;
+  }, []);
+
+  // Load saved preferences
   useEffect(() => {
     setEnabled(localStorage.getItem("keyboardSound") === "true");
     const stored = localStorage.getItem("soundPreset");
@@ -102,40 +145,39 @@ export function useKeyboardSound() {
     }
   }, []);
 
-  const getAudioCtx = useCallback(() => {
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new AudioContext();
-    }
-    return audioCtxRef.current;
-  }, []);
+  // Preload buffers when preset or enabled changes
+  useEffect(() => {
+    if (!enabled) return;
+    const ctx = getAudioCtx();
+    loadPresetBuffers(ctx, preset).then((buffers) => {
+      buffersRef.current = buffers;
+    });
+  }, [enabled, preset, getAudioCtx]);
 
   const playKeySound = useCallback(() => {
-    if (!enabled) return;
-    const { type, frequency, duration, volume } = SOUND_PRESETS[preset].normal;
-    createBeep(getAudioCtx(), frequency, duration, volume, type);
+    if (!enabled || !buffersRef.current) return;
+    const { keys } = buffersRef.current;
+    const idx = keyIndexRef.current % keys.length;
+    keyIndexRef.current++;
+    const buffer = keys[idx];
+    if (buffer) playBuffer(getAudioCtx(), buffer, PRESET_CONFIG[preset].volume);
   }, [enabled, preset, getAudioCtx]);
 
   const playErrorSound = useCallback(() => {
-    if (!enabled) return;
-    const { type, frequency, duration, volume } = SOUND_PRESETS[preset].error;
-    createBeep(getAudioCtx(), frequency, duration, volume, type);
+    if (!enabled || !buffersRef.current) return;
+    playBuffer(
+      getAudioCtx(),
+      buffersRef.current.error,
+      PRESET_CONFIG[preset].volume * 1.2,
+    );
   }, [enabled, preset, getAudioCtx]);
 
   const playCompleteSound = useCallback(() => {
-    if (!enabled) return;
-    const ctx = getAudioCtx();
-    const [first, second] = SOUND_PRESETS[preset].complete;
-    createBeep(ctx, first.frequency, first.duration, first.volume, first.type);
-    setTimeout(
-      () =>
-        createBeep(
-          ctx,
-          second.frequency,
-          second.duration,
-          second.volume,
-          second.type,
-        ),
-      80,
+    if (!enabled || !buffersRef.current) return;
+    playBuffer(
+      getAudioCtx(),
+      buffersRef.current.complete,
+      PRESET_CONFIG[preset].volume,
     );
   }, [enabled, preset, getAudioCtx]);
 
@@ -144,9 +186,12 @@ export function useKeyboardSound() {
       const next = !prev;
       localStorage.setItem("keyboardSound", String(next));
       if (next) {
-        const { type, frequency, duration, volume } =
-          SOUND_PRESETS[preset].normal;
-        createBeep(getAudioCtx(), frequency, duration, volume, type);
+        const ctx = getAudioCtx();
+        loadPresetBuffers(ctx, preset).then((buffers) => {
+          buffersRef.current = buffers;
+          const first = buffers.keys[0];
+          if (first) playBuffer(ctx, first, PRESET_CONFIG[preset].volume);
+        });
       }
       return next;
     });
@@ -156,8 +201,12 @@ export function useKeyboardSound() {
     (id: SoundPresetId) => {
       setPresetState(id);
       localStorage.setItem("soundPreset", id);
-      const { type, frequency, duration, volume } = SOUND_PRESETS[id].normal;
-      createBeep(getAudioCtx(), frequency, duration, volume, type);
+      const ctx = getAudioCtx();
+      loadPresetBuffers(ctx, id).then((buffers) => {
+        buffersRef.current = buffers;
+        const first = buffers.keys[0];
+        if (first) playBuffer(ctx, first, PRESET_CONFIG[id].volume);
+      });
     },
     [getAudioCtx],
   );
