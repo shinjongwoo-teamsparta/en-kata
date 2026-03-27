@@ -1,9 +1,12 @@
 import { z } from "zod";
+import shortCodeData from "~/data/short-codes.json";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+
+const shortCodeLanguages = Object.keys(shortCodeData) as [string, ...string[]];
 
 export const gameResultRouter = createTRPCRouter({
   save: protectedProcedure
@@ -15,7 +18,7 @@ export const gameResultRouter = createTRPCRouter({
         convention: z
           .enum(["camelCase", "snake_case", "kebab-case", "PascalCase"])
           .optional(),
-        language: z.enum(["typescript", "python"]).optional(),
+        language: z.enum(shortCodeLanguages).optional(),
         category: z
           .enum(["general", "frontend", "backend", "devops", "database"])
           .optional(),
