@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "~/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { startTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { NamingConvention } from "~/lib/types";
 
 const themes = [
   { id: "light", label: "Light", icon: "☀️" },
@@ -18,13 +17,6 @@ const themes = [
 const locales = [
   { id: "en" as const, label: "EN" },
   { id: "ko" as const, label: "한국어" },
-];
-
-const CONVENTION_IDS: NamingConvention[] = [
-  "camelCase",
-  "snake_case",
-  "kebab-case",
-  "PascalCase",
 ];
 
 export function SettingsModal() {
@@ -39,13 +31,9 @@ export function SettingsModal() {
   const [mounted, setMounted] = useState(false);
   const [selectedLocale, setSelectedLocale] = useState(locale);
   const [showHint, setShowHint] = useState(false);
-  const [convention, setConvention] = useState<NamingConvention>("camelCase");
-
   useEffect(() => {
     setMounted(true);
     setShowHint(localStorage.getItem("showHint") === "true");
-    const saved = localStorage.getItem("namingConvention") as NamingConvention | null;
-    if (saved && CONVENTION_IDS.includes(saved)) setConvention(saved);
   }, []);
 
   const toggleHint = useCallback(() => {
@@ -54,11 +42,6 @@ export function SettingsModal() {
       localStorage.setItem("showHint", String(next));
       return next;
     });
-  }, []);
-
-  const switchConvention = useCallback((next: NamingConvention) => {
-    setConvention(next);
-    localStorage.setItem("namingConvention", next);
   }, []);
 
   const switchLocale = (next: "en" | "ko") => {
@@ -201,23 +184,6 @@ export function SettingsModal() {
                   </button>
                 </div>
 
-                {/* Variable Name Convention */}
-                <div className="space-y-2">
-                  <label className="text-xs text-[var(--color-text-dim)]">
-                    {t("convention")}
-                  </label>
-                  <select
-                    value={convention}
-                    onChange={(e) => switchConvention(e.target.value as NamingConvention)}
-                    className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 text-sm text-[var(--color-text-bright)] outline-none transition-colors focus:border-[var(--color-accent)]"
-                  >
-                    {CONVENTION_IDS.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
               </div>
             </motion.div>
           </>

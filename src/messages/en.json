@@ -60,8 +60,7 @@
     "theme": "Theme",
     "language": "Language",
     "showHint": "Vocabulary Hints",
-    "showHintDesc": "Show definition & example for each word",
-    "convention": "Naming Convention"
+    "showHintDesc": "Show definition & example for each word"
   },
   "common": {
     "loading": "Loading..."

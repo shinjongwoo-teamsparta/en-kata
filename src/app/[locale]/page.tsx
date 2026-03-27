@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type {
   Difficulty,
   GameMode,
+  NamingConvention,
   WordCategory,
 } from "~/lib/types";
 
@@ -29,14 +30,24 @@ const CATEGORY_IDS: WordCategory[] = [
 ];
 
 // Modes that skip the difficulty step
+const CONVENTION_IDS: NamingConvention[] = [
+  "camelCase",
+  "snake_case",
+  "kebab-case",
+  "PascalCase",
+];
+
 const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["symbol", "variableName"]);
 
-type StepId = "mode" | "duration" | "difficulty" | "category";
+type StepId = "mode" | "duration" | "difficulty" | "category" | "convention";
 
 function getSteps(mode: GameMode): StepId[] {
   const steps: StepId[] = ["mode"];
   if (mode === "word") {
     steps.push("category");
+  }
+  if (mode === "variableName") {
+    steps.push("convention");
   }
   if (!MODES_WITHOUT_DIFFICULTY.has(mode)) {
     steps.push("difficulty");
@@ -68,6 +79,7 @@ export default function HomePage() {
   const [duration, setDuration] = useState(60);
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [category, setCategory] = useState<WordCategory>("general");
+  const [convention, setConvention] = useState<NamingConvention>("camelCase");
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [focusIndex, setFocusIndex] = useState(0);
@@ -112,6 +124,11 @@ export default function HomePage() {
     goNext();
   };
 
+  const selectConvention = (c: NamingConvention) => {
+    setConvention(c);
+    goNext();
+  };
+
   const handleStart = () => {
     const params = new URLSearchParams({
       mode,
@@ -119,8 +136,6 @@ export default function HomePage() {
       difficulty: MODES_WITHOUT_DIFFICULTY.has(mode) ? "medium" : difficulty,
     });
     if (mode === "variableName") {
-      const convention =
-        localStorage.getItem("namingConvention") ?? "camelCase";
       params.set("convention", convention);
     }
     if (mode === "word") params.set("category", category);
@@ -140,6 +155,8 @@ export default function HomePage() {
         return DIFFICULTIES;
       case "category":
         return CATEGORY_IDS;
+      case "convention":
+        return CONVENTION_IDS;
       default:
         return [];
     }
@@ -161,9 +178,12 @@ export default function HomePage() {
       case "category":
         idx = CATEGORY_IDS.indexOf(category);
         break;
+      case "convention":
+        idx = CONVENTION_IDS.indexOf(convention);
+        break;
     }
     setFocusIndex(idx >= 0 ? idx : 0);
-  }, [currentStep, mode, duration, difficulty, category]);
+  }, [currentStep, mode, duration, difficulty, category, convention]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -193,6 +213,9 @@ export default function HomePage() {
             break;
           case "category":
             selectCategory(CATEGORY_IDS[focusIndex] ?? "general");
+            break;
+          case "convention":
+            selectConvention(CONVENTION_IDS[focusIndex] ?? "camelCase");
             break;
         }
       } else if (e.key === "Backspace") {
@@ -355,6 +378,25 @@ export default function HomePage() {
                       }`}
                     >
                       {t(`categories.${c}`)}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Convention step */}
+              {currentStep === "convention" && (
+                <div className="flex flex-wrap justify-center gap-3">
+                  {CONVENTION_IDS.map((c, i) => (
+                    <button
+                      key={c}
+                      onClick={() => selectConvention(c)}
+                      className={`rounded-lg border px-6 py-3 text-sm font-mono font-medium transition-all ${
+                        focusIndex === i
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
+                          : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
+                      }`}
+                    >
+                      {c}
                     </button>
                   ))}
                 </div>
