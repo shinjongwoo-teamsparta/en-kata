@@ -176,6 +176,8 @@ function ResultContent() {
               });
               if (result.convention)
                 params.set("convention", result.convention);
+              if (result.language)
+                params.set("language", result.language);
               router.push(`/play?${params.toString()}`);
             }}
             className="flex-1 rounded-lg bg-[var(--color-primary)] py-3 font-bold text-[var(--color-bg)] transition-colors hover:bg-[var(--color-primary-hover)]"

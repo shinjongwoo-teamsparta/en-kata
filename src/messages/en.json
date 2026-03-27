@@ -16,8 +16,8 @@
       "wordDesc": "SW engineering vocabulary",
       "phrase": "Phrase",
       "phraseDesc": "Dev phrases & sentences",
-      "symbol": "Symbol",
-      "symbolDesc": "Code symbols & operators",
+      "shortCode": "Short Code",
+      "shortCodeDesc": "Code snippets & operators",
       "variableName": "Variable Name",
       "variableNameDesc": "camel snake kebab Pascal"
     },
@@ -25,6 +25,11 @@
       "easy": "easy",
       "medium": "medium",
       "hard": "hard"
+    },
+    "language": "language",
+    "languages": {
+      "jsts": "JS / TS",
+      "python": "Python"
     },
     "categories": {
       "general": "General",

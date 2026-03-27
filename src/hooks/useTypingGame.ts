@@ -28,6 +28,7 @@ export function useTypingGame(settings: GameSettings) {
       settings.difficulty,
       settings.convention,
       settings.category,
+      settings.language,
     );
     return {
       status: "idle",
@@ -65,6 +66,7 @@ export function useTypingGame(settings: GameSettings) {
       settings.difficulty,
       settings.convention,
       settings.category,
+      settings.language,
     );
     correctCharsRef.current = 0;
     startTimeRef.current = Date.now();
@@ -258,6 +260,7 @@ export function useTypingGame(settings: GameSettings) {
           difficulty: settings.difficulty,
           duration: state.elapsed,
           convention: settings.convention,
+          language: settings.language,
           wpm: calculateWpm(state.correctChars, state.elapsed),
           cpm: state.elapsed > 0 ? Math.round(state.correctChars / (state.elapsed / 60)) : 0,
           accuracy:

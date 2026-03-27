@@ -1,4 +1,5 @@
-export type GameMode = "word" | "phrase" | "symbol" | "variableName";
+export type GameMode = "word" | "phrase" | "shortCode" | "variableName";
+export type ShortCodeLanguage = "jsts" | "python";
 export type Difficulty = "easy" | "medium" | "hard";
 export type NamingConvention = "camelCase" | "snake_case" | "kebab-case" | "PascalCase";
 export type WordCategory = "general" | "frontend" | "backend" | "devops" | "database";
@@ -10,6 +11,7 @@ export interface GameSettings {
   duration: number; // seconds
   convention?: NamingConvention;
   category?: WordCategory;
+  language?: ShortCodeLanguage;
   showHint?: boolean;
 }
 
@@ -18,6 +20,7 @@ export interface GameResult {
   difficulty: Difficulty;
   duration: number;
   convention?: NamingConvention;
+  language?: ShortCodeLanguage;
   wpm: number;
   cpm: number;
   accuracy: number;

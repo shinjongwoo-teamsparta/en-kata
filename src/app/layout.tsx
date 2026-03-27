@@ -9,7 +9,7 @@ import { ThemeProvider } from "./_components/ThemeProvider";
 export const metadata: Metadata = {
   title: "en-kata | Typing Practice for Engineers",
   description:
-    "Master your typing speed with software engineering vocabulary, symbols, and naming conventions.",
+    "Master your typing speed with software engineering vocabulary, short code snippets, and naming conventions.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

@@ -11,6 +11,7 @@ import type {
   GameMode,
   GameSettings,
   NamingConvention,
+  ShortCodeLanguage,
   WordCategory,
 } from "~/lib/types";
 
@@ -27,6 +28,8 @@ function PlayContent() {
       convention:
         (searchParams.get("convention") as NamingConvention) ?? undefined,
       category: (searchParams.get("category") as WordCategory) ?? undefined,
+      language:
+        (searchParams.get("language") as ShortCodeLanguage) ?? undefined,
       showHint: searchParams.get("showHint") === "true",
     }),
     [searchParams],

@@ -8,16 +8,19 @@ import type {
   Difficulty,
   GameMode,
   NamingConvention,
+  ShortCodeLanguage,
   WordCategory,
 } from "~/lib/types";
 
-const MODE_IDS: GameMode[] = ["word", "phrase", "symbol", "variableName"];
+const MODE_IDS: GameMode[] = ["word", "phrase", "shortCode", "variableName"];
 const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
   phrase: '""',
-  symbol: "{}",
+  shortCode: "</>",
   variableName: "xY",
 };
+
+const LANGUAGE_IDS: ShortCodeLanguage[] = ["jsts", "python"];
 
 const DURATIONS = [30, 60, 120];
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
@@ -37,14 +40,17 @@ const CONVENTION_IDS: NamingConvention[] = [
   "PascalCase",
 ];
 
-const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["symbol", "variableName"]);
+const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["shortCode", "variableName"]);
 
-type StepId = "mode" | "duration" | "difficulty" | "category" | "convention";
+type StepId = "mode" | "duration" | "difficulty" | "category" | "convention" | "language";
 
 function getSteps(mode: GameMode): StepId[] {
   const steps: StepId[] = ["mode"];
   if (mode === "word") {
     steps.push("category");
+  }
+  if (mode === "shortCode") {
+    steps.push("language");
   }
   if (mode === "variableName") {
     steps.push("convention");
@@ -80,6 +86,7 @@ export default function HomePage() {
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [category, setCategory] = useState<WordCategory>("general");
   const [convention, setConvention] = useState<NamingConvention>("camelCase");
+  const [language, setLanguage] = useState<ShortCodeLanguage>("jsts");
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [focusIndex, setFocusIndex] = useState(0);
@@ -129,6 +136,11 @@ export default function HomePage() {
     goNext();
   };
 
+  const selectLanguage = (l: ShortCodeLanguage) => {
+    setLanguage(l);
+    goNext();
+  };
+
   const handleStart = () => {
     const params = new URLSearchParams({
       mode,
@@ -138,6 +150,7 @@ export default function HomePage() {
     if (mode === "variableName") {
       params.set("convention", convention);
     }
+    if (mode === "shortCode") params.set("language", language);
     if (mode === "word") params.set("category", category);
     const showHint = localStorage.getItem("showHint") === "true";
     if (mode === "word" && showHint) params.set("showHint", "true");
@@ -157,6 +170,8 @@ export default function HomePage() {
         return CATEGORY_IDS;
       case "convention":
         return CONVENTION_IDS;
+      case "language":
+        return LANGUAGE_IDS;
       default:
         return [];
     }
@@ -181,9 +196,12 @@ export default function HomePage() {
       case "convention":
         idx = CONVENTION_IDS.indexOf(convention);
         break;
+      case "language":
+        idx = LANGUAGE_IDS.indexOf(language);
+        break;
     }
     setFocusIndex(idx >= 0 ? idx : 0);
-  }, [currentStep, mode, duration, difficulty, category, convention]);
+  }, [currentStep, mode, duration, difficulty, category, convention, language]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -216,6 +234,9 @@ export default function HomePage() {
             break;
           case "convention":
             selectConvention(CONVENTION_IDS[focusIndex] ?? "camelCase");
+            break;
+          case "language":
+            selectLanguage(LANGUAGE_IDS[focusIndex] ?? "jsts");
             break;
         }
       } else if (e.key === "Backspace") {
@@ -397,6 +418,25 @@ export default function HomePage() {
                       }`}
                     >
                       {c}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Language step */}
+              {currentStep === "language" && (
+                <div className="flex flex-wrap justify-center gap-3">
+                  {LANGUAGE_IDS.map((l, i) => (
+                    <button
+                      key={l}
+                      onClick={() => selectLanguage(l)}
+                      className={`rounded-lg border px-6 py-3 text-sm font-medium transition-all ${
+                        focusIndex === i
+                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
+                          : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
+                      }`}
+                    >
+                      {t(`languages.${l}`)}
                     </button>
                   ))}
                 </div>

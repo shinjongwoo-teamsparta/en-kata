@@ -16,8 +16,8 @@
       "wordDesc": "SW 엔지니어링 어휘",
       "phrase": "문장",
       "phraseDesc": "개발 문장 & 표현",
-      "symbol": "기호",
-      "symbolDesc": "코드 기호 & 연산자",
+      "shortCode": "숏 코드",
+      "shortCodeDesc": "짧은 코드 조각 & 연산자",
       "variableName": "변수명",
       "variableNameDesc": "camel snake kebab Pascal"
     },
@@ -25,6 +25,11 @@
       "easy": "쉬움",
       "medium": "보통",
       "hard": "어려움"
+    },
+    "language": "언어",
+    "languages": {
+      "jsts": "JS / TS",
+      "python": "Python"
     },
     "categories": {
       "general": "일반",

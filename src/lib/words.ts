@@ -7,6 +7,7 @@ import type {
   Difficulty,
   GameMode,
   NamingConvention,
+  ShortCodeLanguage,
   WordCategory,
   WordItem,
 } from "./types";
@@ -65,6 +66,7 @@ export function getWords(
   difficulty: Difficulty,
   convention?: NamingConvention,
   category?: WordCategory,
+  language?: ShortCodeLanguage,
 ): WordItem[] {
   switch (mode) {
     case "word": {
@@ -88,9 +90,10 @@ export function getWords(
         (phrasesData as Record<string, string[]>)[difficulty] ?? [];
       return shuffle(phrases).map((p) => ({ display: p, target: p }));
     }
-    case "symbol": {
+    case "shortCode": {
+      const lang = language ?? "jsts";
       const symbols =
-        (symbolsData as Record<string, string[]>)[difficulty] ?? [];
+        (symbolsData as Record<string, string[]>)[lang] ?? [];
       return shuffle(symbols).map((s) => ({ display: s, target: s }));
     }
     case "variableName": {
