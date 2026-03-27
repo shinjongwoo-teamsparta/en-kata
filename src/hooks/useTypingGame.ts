@@ -140,10 +140,11 @@ export function useTypingGame(settings: GameSettings) {
     (e: KeyboardEvent) => {
       if (state.status !== "playing" || !currentWord) return;
 
+      // Ignore IME composition events
+      if (e.isComposing || e.keyCode === 229) return;
+
       // Ignore modifier keys
       if (e.ctrlKey || e.metaKey || e.altKey) return;
-
-      const target = currentWord.target;
 
       if (e.key === "Backspace") {
         e.preventDefault();
@@ -166,8 +167,10 @@ export function useTypingGame(settings: GameSettings) {
       e.preventDefault();
 
       setState((prev) => {
+        const currentTarget = prev.words[prev.currentWordIndex]?.target;
+        if (!currentTarget) return prev;
         const charIndex = prev.currentCharIndex;
-        const expectedChar = target[charIndex];
+        const expectedChar = currentTarget[charIndex];
         const isCorrect = e.key === expectedChar;
         const newCharStates = [...prev.charStates];
 
@@ -189,7 +192,7 @@ export function useTypingGame(settings: GameSettings) {
         const newTotalKeystrokes = prev.totalKeystrokes + 1;
 
         // Word completed
-        if (newCharIndex >= target.length) {
+        if (newCharIndex >= currentTarget.length) {
           const nextWordIndex = prev.currentWordIndex + 1;
 
           // If we run out of words, get more
