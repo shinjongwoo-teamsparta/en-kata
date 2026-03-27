@@ -54,6 +54,8 @@ function ResultContent() {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
         navigateToRetry();
+      } else if (e.key === "Escape") {
+        router.push("/");
       }
     };
     window.addEventListener("keydown", handler);
