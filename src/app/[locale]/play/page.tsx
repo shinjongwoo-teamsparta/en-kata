@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo } from "react";
 import { useTranslations } from "next-intl";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "~/i18n/navigation";
 import { useTypingGame } from "~/hooks/useTypingGame";
 import type {
@@ -74,7 +75,12 @@ function PlayContent() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-4">
+    <motion.main
+      className="flex min-h-screen flex-col items-center justify-center px-4"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+    >
       <div className="w-full max-w-3xl space-y-8">
         {/* Top bar: timer, WPM, mode */}
         <div className="flex items-center justify-between text-sm">
@@ -93,62 +99,104 @@ function PlayContent() {
               {game.wpm}{" "}
               <span className="text-xs font-normal">{t("wpm")}</span>
             </span>
-            <span
+            <motion.span
               className={`text-lg font-bold ${
                 game.timeLeft <= 10
                   ? "text-[var(--color-incorrect)]"
                   : "text-[var(--color-text-bright)]"
               }`}
+              animate={
+                game.timeLeft <= 10
+                  ? { scale: [1, 1.05, 1] }
+                  : { scale: 1 }
+              }
+              transition={
+                game.timeLeft <= 10
+                  ? { duration: 0.6, repeat: Infinity, repeatDelay: 0.4 }
+                  : { duration: 0.2 }
+              }
             >
               {formatTime(game.timeLeft)}
-            </span>
+            </motion.span>
           </div>
         </div>
 
         {/* Naming mode: show the phrase */}
-        {isNaming && displayText !== currentTarget && (
-          <div className="text-center">
-            <span className="text-lg text-[var(--color-accent)]">
-              {displayText}
-            </span>
-          </div>
-        )}
+        <AnimatePresence>
+          {isNaming && displayText !== currentTarget && (
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <span className="text-lg text-[var(--color-accent)]">
+                {displayText}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Typing area */}
         <div className="rounded-xl bg-[var(--color-bg-surface)] p-8">
           {/* Current word */}
-          <div className="flex flex-wrap items-center justify-center gap-0 text-3xl leading-relaxed">
-            {currentTarget.split("").map((char, i) => {
-              let colorClass = "text-[var(--color-text-dim)]";
-              if (i < game.currentCharIndex) {
-                colorClass =
-                  game.charStates[i] === "correct"
-                    ? "text-[var(--color-correct)]"
-                    : "text-[var(--color-incorrect)]";
-              }
-              const isCursor = i === game.currentCharIndex;
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={game.currentWordIndex}
+              className="flex flex-wrap items-center justify-center gap-0 text-3xl leading-relaxed"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.15 }}
+            >
+              {currentTarget.split("").map((char, i) => {
+                let colorClass = "text-[var(--color-text-dim)]";
+                if (i < game.currentCharIndex) {
+                  colorClass =
+                    game.charStates[i] === "correct"
+                      ? "text-[var(--color-correct)]"
+                      : "text-[var(--color-incorrect)]";
+                }
+                const isCursor = i === game.currentCharIndex;
 
-              return (
-                <span
-                  key={i}
-                  className={`relative inline-block ${colorClass} ${
-                    isCursor
-                      ? "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:animate-pulse after:bg-[var(--color-cursor)]"
-                      : ""
-                  }`}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </span>
-              );
-            })}
-          </div>
+                return (
+                  <span
+                    key={i}
+                    className={`relative inline-block ${colorClass} ${
+                      isCursor
+                        ? "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:animate-pulse after:bg-[var(--color-cursor)]"
+                        : ""
+                    }`}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
 
           {/* Upcoming words */}
-          <div className="mt-6 flex flex-wrap justify-center gap-3 text-lg text-[var(--color-text-dim)] opacity-40">
-            {upcomingWords.map((w, i) => (
-              <span key={i}>{w}</span>
-            ))}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={game.currentWordIndex}
+              className="mt-6 flex flex-wrap justify-center gap-3 text-lg text-[var(--color-text-dim)] opacity-40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              {upcomingWords.map((w, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: i * 0.03 }}
+                >
+                  {w}
+                </motion.span>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Progress */}
@@ -162,7 +210,7 @@ function PlayContent() {
           </button>
         </div>
       </div>
-    </main>
+    </motion.main>
   );
 }
 
