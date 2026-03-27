@@ -15,9 +15,9 @@
       "word": "단어",
       "wordDesc": "SW 엔지니어링 어휘",
       "phrase": "문장",
-      "phraseDesc": "개발 문장 & 표현",
+      "phraseDesc": "SW 엔지니어링 문장",
       "shortCode": "숏 코드",
-      "shortCodeDesc": "짧은 코드 조각 & 연산자",
+      "shortCodeDesc": "코드 스니펫 & 연산자",
       "variableName": "변수명",
       "variableNameDesc": "camel snake kebab Pascal"
     },
