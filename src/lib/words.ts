@@ -1,6 +1,6 @@
 import wordsData from "~/data/words.json";
 import phrasesData from "~/data/phrases.json";
-import symbolsData from "~/data/symbols.json";
+import shortCodeData from "~/data/short-codes.json";
 import namingData from "~/data/naming-phrases.json";
 import hintsData from "~/data/word-hints.json";
 import type {
@@ -93,7 +93,7 @@ export function getWords(
     case "shortCode": {
       const lang = language ?? "jsts";
       const symbols =
-        (symbolsData as Record<string, string[]>)[lang] ?? [];
+        (shortCodeData as Record<string, string[]>)[lang] ?? [];
       return shuffle(symbols).map((s) => ({ display: s, target: s }));
     }
     case "variableName": {
