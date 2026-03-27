@@ -33,7 +33,7 @@ export function LocaleSwitcher() {
   const activeIndex = locales.findIndex((l) => l.id === selected);
 
   return (
-    <div className="fixed right-4 top-4 z-50 flex overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]">
+    <div className="flex overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]">
       {/* Sliding indicator */}
       <motion.div
         className="absolute inset-y-0 rounded-md bg-[var(--color-bg-surface)]"

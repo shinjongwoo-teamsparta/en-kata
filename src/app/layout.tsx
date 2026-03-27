@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import { ThemeProvider } from "./_components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "en-kata | Typing Practice for Engineers",
@@ -21,9 +22,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html className={`${geistMono.variable}`}>
+    <html className={`${geistMono.variable}`} suppressHydrationWarning>
       <body className="min-h-screen">
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ThemeProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
