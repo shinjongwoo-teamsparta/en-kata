@@ -21,7 +21,13 @@ interface TypingGameState {
   charStates: ("correct" | "incorrect" | "pending")[];
 }
 
-export function useTypingGame(settings: GameSettings) {
+interface TypingGameCallbacks {
+  onCorrectKey?: () => void;
+  onIncorrectKey?: () => void;
+  onWordComplete?: () => void;
+}
+
+export function useTypingGame(settings: GameSettings, callbacks?: TypingGameCallbacks) {
   const [state, setState] = useState<TypingGameState>(() => {
     const words = getWords(
       settings.mode,
@@ -178,6 +184,12 @@ export function useTypingGame(settings: GameSettings) {
 
         newCharStates[charIndex] = isCorrect ? "correct" : "incorrect";
 
+        if (isCorrect) {
+          callbacks?.onCorrectKey?.();
+        } else {
+          callbacks?.onIncorrectKey?.();
+        }
+
         const newMistakeMap = { ...prev.mistakeMap };
         if (!isCorrect && expectedChar) {
           newMistakeMap[expectedChar] = (newMistakeMap[expectedChar] ?? 0) + 1;
@@ -195,6 +207,7 @@ export function useTypingGame(settings: GameSettings) {
 
         // Word completed
         if (newCharIndex >= currentTarget.length) {
+          callbacks?.onWordComplete?.();
           const nextWordIndex = prev.currentWordIndex + 1;
 
           // If we run out of words, get more
@@ -261,6 +274,7 @@ export function useTypingGame(settings: GameSettings) {
           duration: state.elapsed,
           convention: settings.convention,
           language: settings.language,
+          category: settings.category,
           wpm: calculateWpm(state.correctChars, state.elapsed),
           cpm: state.elapsed > 0 ? Math.round(state.correctChars / (state.elapsed / 60)) : 0,
           accuracy:

@@ -53,6 +53,8 @@
     "changeSettings": "설정 변경",
     "noData": "결과 데이터가 없습니다.",
     "goBack": "돌아가기",
+    "saved": "결과 저장됨!",
+    "viewStats": "통계 보기 →",
     "stats": {
       "wpm": "WPM",
       "cpm": "CPM",
@@ -60,12 +62,31 @@
       "words": "단어"
     }
   },
+  "stats": {
+    "title": "통계",
+    "bestWpm": "최고 WPM",
+    "avgWpm": "평균 WPM",
+    "avgAccuracy": "평균 정확도",
+    "totalGames": "전체 게임 수",
+    "bestByMode": "모드별 최고 WPM",
+    "wpmTrend": "일별 WPM 추이 (30일)",
+    "recentGames": "최근 게임",
+    "games": "회",
+    "noData": "아직 게임 데이터가 없습니다. 게임을 플레이하면 통계를 볼 수 있어요!",
+    "startPlaying": "플레이 시작",
+    "loginRequired": "통계를 보려면 로그인이 필요합니다.",
+    "goHome": "홈으로"
+  },
   "settings": {
     "title": "설정",
     "theme": "테마",
     "language": "언어",
     "showHint": "어휘 힌트",
-    "showHintDesc": "각 단어의 설명과 용례를 표시합니다"
+    "showHintDesc": "각 단어의 설명과 용례를 표시합니다",
+    "keyboardSound": "키보드 소리",
+    "keyboardSoundDesc": "타이핑 시 효과음 재생",
+    "signInGithub": "GitHub으로 로그인",
+    "signOut": "로그아웃"
   },
   "common": {
     "loading": "로딩 중..."

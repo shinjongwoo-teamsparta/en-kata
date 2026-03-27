@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "~/i18n/navigation";
 import { useTypingGame } from "~/hooks/useTypingGame";
+import { useKeyboardSound } from "~/hooks/useKeyboardSound";
 import type {
   Difficulty,
   GameMode,
@@ -35,7 +36,12 @@ function PlayContent() {
     [searchParams],
   );
 
-  const game = useTypingGame(settings);
+  const { playKeySound, playErrorSound, playCompleteSound } = useKeyboardSound();
+  const game = useTypingGame(settings, {
+    onCorrectKey: playKeySound,
+    onIncorrectKey: playErrorSound,
+    onWordComplete: playCompleteSound,
+  });
 
   // Auto-start on mount
   useEffect(() => {
@@ -168,17 +174,21 @@ function PlayContent() {
                   <span key={wi} className="inline-flex whitespace-nowrap">
                     {word.map(({ char, idx }) => {
                       let colorClass = "text-[var(--color-text-dim)]";
+                      let bgClass = "";
                       if (idx < game.currentCharIndex) {
-                        colorClass =
-                          game.charStates[idx] === "correct"
-                            ? "text-[var(--color-correct)]"
-                            : "text-[var(--color-incorrect)]";
+                        const isCorrect = game.charStates[idx] === "correct";
+                        colorClass = isCorrect
+                          ? "text-[var(--color-correct)]"
+                          : "text-[var(--color-incorrect)]";
+                        if (char === " " && !isCorrect) {
+                          bgClass = "bg-[var(--color-incorrect)]/30 rounded-sm";
+                        }
                       }
                       const isCursor = idx === game.currentCharIndex;
                       return (
                         <span
                           key={idx}
-                          className={`relative inline-block ${colorClass} ${
+                          className={`relative inline-block ${colorClass} ${bgClass} ${
                             isCursor
                               ? "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:animate-pulse after:bg-[var(--color-cursor)]"
                               : ""

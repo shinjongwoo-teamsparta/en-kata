@@ -14,8 +14,9 @@
 | Animation | Framer Motion |
 | i18n | next-intl (en, ko) |
 | Font | Geist Mono |
-| DB | PostgreSQL + Prisma (준비됨, 아직 미사용) |
-| API | tRPC 11 (인프라 구축 완료, 게임에서는 미사용) |
+| Auth | NextAuth.js v5 (GitHub OAuth) + Prisma Adapter |
+| DB | PostgreSQL + Prisma |
+| API | tRPC 11 |
 | Package Manager | pnpm |
 
 ---
@@ -57,6 +58,7 @@
 | 언어 | JS/TS / Python | shortCode 모드 전용 |
 | 네이밍 컨벤션 | camelCase / snake_case / kebab-case / PascalCase | variableName 모드 전용, localStorage 저장 |
 | 어휘 힌트 | on / off | word 모드 전용, localStorage 저장 |
+| 키보드 사운드 | on / off | Web Audio API, localStorage 저장 |
 | 테마 | Light / Dark / System | |
 | 언어 | English / 한국어 | |
 
@@ -68,6 +70,9 @@
 /[locale]/          → 게임 설정 (OPOA 스텝 위자드)
 /[locale]/play      → 타이핑 게임
 /[locale]/result    → 결과 화면
+/[locale]/stats     → 통계 대시보드 (로그인 필요)
+/api/auth/[...]     → NextAuth 인증 엔드포인트
+/api/trpc/[...]     → tRPC API 엔드포인트
 ```
 
 ### 홈 (게임 설정)
@@ -89,6 +94,13 @@
 - 시간별 WPM 바 차트
 - 가장 많이 틀린 글자 Top 5
 - 같은 설정으로 재시도 / 설정 변경 버튼
+- 로그인 시 결과 DB 자동 저장
+
+### 통계 대시보드 (로그인 필요)
+- 전체 통계: 최고 WPM, 평균 WPM, 평균 정확도, 총 게임 수
+- 모드별 최고 WPM
+- 일별 WPM 추이 차트 (최근 30일)
+- 최근 게임 기록 테이블
 
 ---
 
@@ -100,7 +112,7 @@
 |------|------|
 | `words.json` | 카테고리별 × 난이도별 SW 단어 |
 | `phrases.json` | 난이도별 개발 문장 |
-| `symbols.json` | 언어별(JS/TS, Python) 숏 코드 조각 |
+| `short-codes.json` | 언어별(JS/TS, Python) 숏 코드 조각 |
 | `naming-phrases.json` | 네이밍 컨벤션 변환용 구문 |
 | `word-hints.json` | 단어 정의 & 사용 예시 (700+ 항목) |
 
@@ -110,7 +122,8 @@
 
 - **클라이언트 중심**: 게임 로직 전체가 브라우저에서 실행
 - **URL 파라미터 기반**: 게임 설정은 query params로 전달, 결과도 인코딩하여 URL로 전달
-- **Stateless**: 서버 사이드 데이터 저장 없음 (DB 인프라는 준비됨)
+- **선택적 인증**: 비 로그인으로 플레이 가능, 로그인 시 결과 저장 & 통계
+- **End-to-End 타입 안전**: tRPC + Zod 스키마 검증
 - **완전한 i18n**: UI 전체 영어/한국어 지원
 - **테마 시스템**: Catppuccin 팔레트 기반 Light/Dark 모드
 
@@ -125,16 +138,25 @@ pnpm dev
 
 http://localhost:3000 에서 실행.
 
+### 환경 변수
+
+```env
+DATABASE_URL=           # PostgreSQL 연결 문자열
+AUTH_SECRET=            # NextAuth 시크릿 (32자 이상)
+AUTH_GITHUB_ID=         # GitHub OAuth App ID
+AUTH_GITHUB_SECRET=     # GitHub OAuth App Secret
+```
+
 ---
 
 ## Roadmap
 
-### Phase 2
-- [ ] GitHub OAuth 로그인 (NextAuth)
-  - 비 로그인 유저도 플레이 가능해야 됨
-- [ ] 게임 결과 DB 저장 (Prisma + PostgreSQL)
-- [ ] 통계 대시보드 (일별/주별 WPM 추이, 모드별 최고 기록)
-- [ ] 키보드 사운드 옵션
+### Phase 2 ✅
+- [x] GitHub OAuth 로그인 (NextAuth)
+  - 비 로그인 유저도 플레이 가능
+- [x] 게임 결과 DB 저장 (Prisma + PostgreSQL)
+- [x] 통계 대시보드 (일별 WPM 추이, 모드별 최고 기록)
+- [x] 키보드 사운드 옵션 (Web Audio API)
 
 ### Phase 3
 - [ ] 리더보드

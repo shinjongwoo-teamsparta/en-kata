@@ -1,9 +1,11 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
+import { useSession } from "next-auth/react";
 import { useRouter } from "~/i18n/navigation";
+import { api } from "~/trpc/react";
 import type { GameResult } from "~/lib/types";
 
 function ResultContent() {
@@ -20,6 +22,18 @@ function ResultContent() {
       return null;
     }
   }, [searchParams]);
+
+  // Auto-save result for logged-in users
+  const { data: session } = useSession();
+  const saveResult = api.gameResult.save.useMutation();
+  const hasSaved = useRef(false);
+
+  useEffect(() => {
+    if (result && session?.user && !hasSaved.current) {
+      hasSaved.current = true;
+      saveResult.mutate(result);
+    }
+  }, [result, session]);
 
   if (!result) {
     return (
@@ -178,6 +192,8 @@ function ResultContent() {
                 params.set("convention", result.convention);
               if (result.language)
                 params.set("language", result.language);
+              if (result.category)
+                params.set("category", result.category);
               router.push(`/play?${params.toString()}`);
             }}
             className="flex-1 rounded-lg bg-[var(--color-primary)] py-3 font-bold text-[var(--color-bg)] transition-colors hover:bg-[var(--color-primary-hover)]"
@@ -191,6 +207,23 @@ function ResultContent() {
             {t("changeSettings")}
           </button>
         </div>
+
+        {/* Saved indicator / Stats link */}
+        {session?.user && (
+          <div className="text-center">
+            {saveResult.isSuccess && (
+              <span className="text-xs text-[var(--color-correct)]">
+                {t("saved")}
+              </span>
+            )}
+            <button
+              onClick={() => router.push("/stats")}
+              className="ml-3 text-xs text-[var(--color-primary)] hover:underline"
+            >
+              {t("viewStats")}
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );

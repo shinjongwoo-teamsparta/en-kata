@@ -21,6 +21,7 @@ export interface GameResult {
   duration: number;
   convention?: NamingConvention;
   language?: ShortCodeLanguage;
+  category?: WordCategory;
   wpm: number;
   cpm: number;
   accuracy: number;

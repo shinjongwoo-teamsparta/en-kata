@@ -53,6 +53,8 @@
     "changeSettings": "Change Settings",
     "noData": "No result data found.",
     "goBack": "Go back",
+    "saved": "Result saved!",
+    "viewStats": "View Stats →",
     "stats": {
       "wpm": "WPM",
       "cpm": "CPM",
@@ -60,12 +62,31 @@
       "words": "Words"
     }
   },
+  "stats": {
+    "title": "Statistics",
+    "bestWpm": "Best WPM",
+    "avgWpm": "Avg WPM",
+    "avgAccuracy": "Avg Accuracy",
+    "totalGames": "Total Games",
+    "bestByMode": "Best WPM by Mode",
+    "wpmTrend": "Daily WPM Trend (30 days)",
+    "recentGames": "Recent Games",
+    "games": "games",
+    "noData": "No game data yet. Play some games to see your stats!",
+    "startPlaying": "Start playing",
+    "loginRequired": "Please sign in to view your statistics.",
+    "goHome": "Go home"
+  },
   "settings": {
     "title": "Settings",
     "theme": "Theme",
     "language": "Language",
     "showHint": "Vocabulary Hints",
-    "showHintDesc": "Show definition & example for each word"
+    "showHintDesc": "Show definition & example for each word",
+    "keyboardSound": "Keyboard Sound",
+    "keyboardSoundDesc": "Play sounds on keystrokes",
+    "signInGithub": "Sign in with GitHub",
+    "signOut": "Sign out"
   },
   "common": {
     "loading": "Loading..."
