@@ -52,6 +52,13 @@
       "words": "Words"
     }
   },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "showHint": "Vocabulary Hints",
+    "showHintDesc": "Show definition & example for each word"
+  },
   "common": {
     "loading": "Loading..."
   }

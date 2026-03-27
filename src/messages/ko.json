@@ -52,6 +52,13 @@
       "words": "단어"
     }
   },
+  "settings": {
+    "title": "설정",
+    "theme": "테마",
+    "language": "언어",
+    "showHint": "어휘 힌트",
+    "showHintDesc": "각 단어의 설명과 용례를 표시합니다"
+  },
   "common": {
     "loading": "로딩 중..."
   }

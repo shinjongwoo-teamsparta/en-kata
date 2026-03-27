@@ -40,8 +40,6 @@ export default function HomePage() {
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [convention, setConvention] = useState<NamingConvention>("camelCase");
   const [category, setCategory] = useState<WordCategory>("general");
-  const [showHint, setShowHint] = useState(false);
-
   const handleStart = () => {
     const params = new URLSearchParams({
       mode,
@@ -50,6 +48,7 @@ export default function HomePage() {
     });
     if (mode === "naming") params.set("convention", convention);
     if (mode === "word") params.set("category", category);
+    const showHint = localStorage.getItem("showHint") === "true";
     if (mode === "word" && showHint) params.set("showHint", "true");
     router.push(`/play?${params.toString()}`);
   };
@@ -166,34 +165,6 @@ export default function HomePage() {
                 </button>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Hint toggle (Word mode only) */}
-        {mode === "word" && (
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="text-sm text-[var(--color-text-dim)]">
-                {t("showHint")}
-              </label>
-              <p className="text-xs text-[var(--color-text-dim)] opacity-60">
-                {t("showHintDesc")}
-              </p>
-            </div>
-            <button
-              onClick={() => setShowHint(!showHint)}
-              className={`relative h-7 w-12 rounded-full transition-colors ${
-                showHint
-                  ? "bg-[var(--color-primary)]"
-                  : "bg-[var(--color-border)]"
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-white transition-transform ${
-                  showHint ? "translate-x-5" : "translate-x-0"
-                }`}
-              />
-            </button>
           </div>
         )}
 
