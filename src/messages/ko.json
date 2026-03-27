@@ -85,6 +85,13 @@
     "showHintDesc": "각 단어의 설명과 용례를 표시합니다",
     "keyboardSound": "키보드 소리",
     "keyboardSoundDesc": "타이핑 시 효과음 재생",
+    "soundPreset": "소리 스타일",
+    "soundPresets": {
+      "soft": "부드러움",
+      "mechanical": "기계식",
+      "retro": "레트로",
+      "minimal": "미니멀"
+    },
     "signInGithub": "GitHub으로 로그인",
     "signOut": "로그아웃"
   },

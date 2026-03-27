@@ -8,7 +8,10 @@ import { useSearchParams } from "next/navigation";
 import { startTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useKeyboardSound } from "~/hooks/useKeyboardSound";
+import {
+  useKeyboardSound,
+  SOUND_PRESET_IDS,
+} from "~/hooks/useKeyboardSound";
 
 const themes = [
   { id: "light", label: "Light", icon: "☀️" },
@@ -30,7 +33,12 @@ export function SettingsModal() {
   const searchParams = useSearchParams();
 
   const { data: session } = useSession();
-  const { enabled: soundEnabled, toggle: toggleSound } = useKeyboardSound();
+  const {
+    enabled: soundEnabled,
+    toggle: toggleSound,
+    preset: soundPreset,
+    setPreset: setSoundPreset,
+  } = useKeyboardSound();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [selectedLocale, setSelectedLocale] = useState(locale);
@@ -213,6 +221,30 @@ export function SettingsModal() {
                     />
                   </button>
                 </div>
+
+                {/* Sound Preset */}
+                {soundEnabled && (
+                  <div className="space-y-2">
+                    <label className="text-xs text-[var(--color-text-dim)]">
+                      {t("soundPreset")}
+                    </label>
+                    <div className="flex overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]">
+                      {SOUND_PRESET_IDS.map((id) => (
+                        <button
+                          key={id}
+                          onClick={() => setSoundPreset(id)}
+                          className={`flex-1 px-2 py-1.5 text-xs transition-colors ${
+                            soundPreset === id
+                              ? "bg-[var(--color-bg-surface)] text-[var(--color-text-bright)]"
+                              : "text-[var(--color-text-dim)]"
+                          }`}
+                        >
+                          {t(`soundPresets.${id}`)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Account */}
                 <div className="border-t border-[var(--color-border)] pt-4">

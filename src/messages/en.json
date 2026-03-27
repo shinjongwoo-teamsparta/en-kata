@@ -85,6 +85,13 @@
     "showHintDesc": "Show definition & example for each word",
     "keyboardSound": "Keyboard Sound",
     "keyboardSoundDesc": "Play sounds on keystrokes",
+    "soundPreset": "Sound Style",
+    "soundPresets": {
+      "soft": "Soft",
+      "mechanical": "Mechanical",
+      "retro": "Retro",
+      "minimal": "Minimal"
+    },
     "signInGithub": "Sign in with GitHub",
     "signOut": "Sign out"
   },

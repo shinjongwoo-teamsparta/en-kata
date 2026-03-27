@@ -22,6 +22,32 @@ const MODE_ICONS: Record<GameMode, string> = {
 
 const LANGUAGE_IDS: ShortCodeLanguage[] = ["jsts", "python"];
 
+const LANGUAGE_ICONS: Record<string, React.ReactNode> = {
+  jsts: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3" />
+      <path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3" />
+      <path d="M12 20v-8a2 2 0 0 0-2-2H8" />
+      <path d="M8 12h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8" />
+    </svg>
+  ),
+  python: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2C6.5 2 6 4.5 6 4.5V7h6v1H4.5S2 7.5 2 12s2.2 5 2.2 5H6v-2.5C6 12 8 12 8 12h4s2 0 2-2.5V5S14 2 12 2z" />
+      <circle cx="8.5" cy="5" r="0.8" fill="currentColor" />
+      <path d="M12 22c5.5 0 6-2.5 6-2.5V17h-6v-1h7.5S22 16.5 22 12s-2.2-5-2.2-5H18v2.5c0 2.5-2 2.5-2 2.5h-4s-2 0-2 2.5V19s0 3 2 3z" />
+      <circle cx="15.5" cy="19" r="0.8" fill="currentColor" />
+    </svg>
+  ),
+};
+
+const FallbackLanguageIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="16 18 22 12 16 6" />
+    <polyline points="8 6 2 12 8 18" />
+  </svg>
+);
+
 const DURATIONS = [30, 60, 120];
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
 const CATEGORY_IDS: WordCategory[] = [
@@ -430,12 +456,13 @@ export default function HomePage() {
                     <button
                       key={l}
                       onClick={() => selectLanguage(l)}
-                      className={`rounded-lg border px-6 py-3 text-sm font-medium transition-all ${
+                      className={`flex items-center gap-2 rounded-lg border px-6 py-3 text-sm font-medium transition-all ${
                         focusIndex === i
                           ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
                       }`}
                     >
+                      {LANGUAGE_ICONS[l] ?? <FallbackLanguageIcon />}
                       {t(`languages.${l}`)}
                     </button>
                   ))}
