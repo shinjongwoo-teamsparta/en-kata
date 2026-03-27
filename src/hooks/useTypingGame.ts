@@ -56,6 +56,17 @@ export function useTypingGame(settings: GameSettings, callbacks?: TypingGameCall
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const correctCharsRef = useRef(0);
+  const backspaceLockRef = useRef(false);
+
+  // Sync backspace lock setting from localStorage
+  useEffect(() => {
+    backspaceLockRef.current = localStorage.getItem("backspaceLock") === "true";
+    const handler = () => {
+      backspaceLockRef.current = localStorage.getItem("backspaceLock") === "true";
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
 
   const currentWord = state.words[state.currentWordIndex];
 
@@ -156,6 +167,7 @@ export function useTypingGame(settings: GameSettings, callbacks?: TypingGameCall
 
       if (e.key === "Backspace") {
         e.preventDefault();
+        if (backspaceLockRef.current) return;
         setState((prev) => {
           if (prev.currentCharIndex === 0) return prev;
           const newCharStates = [...prev.charStates];

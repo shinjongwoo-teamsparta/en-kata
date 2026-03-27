@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { useRouter } from "~/i18n/navigation";
@@ -34,6 +34,31 @@ function ResultContent() {
       saveResult.mutate(result);
     }
   }, [result, session]);
+
+  const navigateToRetry = useCallback(() => {
+    if (!result) return;
+    const params = new URLSearchParams({
+      mode: result.mode,
+      duration: result.duration.toString(),
+      difficulty: result.difficulty,
+    });
+    if (result.convention) params.set("convention", result.convention);
+    if (result.language) params.set("language", result.language);
+    if (result.category) params.set("category", result.category);
+    router.push(`/play?${params.toString()}`);
+  }, [result, router]);
+
+  // Enter to restart
+  useEffect(() => {
+    if (!result) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        navigateToRetry();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [result, navigateToRetry]);
 
   if (!result) {
     return (
@@ -182,20 +207,7 @@ function ResultContent() {
         {/* Actions */}
         <div className="flex gap-4">
           <button
-            onClick={() => {
-              const params = new URLSearchParams({
-                mode: result.mode,
-                duration: result.duration.toString(),
-                difficulty: result.difficulty,
-              });
-              if (result.convention)
-                params.set("convention", result.convention);
-              if (result.language)
-                params.set("language", result.language);
-              if (result.category)
-                params.set("category", result.category);
-              router.push(`/play?${params.toString()}`);
-            }}
+            onClick={navigateToRetry}
             className="flex-1 rounded-lg bg-[var(--color-primary)] py-3 font-bold text-[var(--color-bg)] transition-colors hover:bg-[var(--color-primary-hover)]"
           >
             {t("tryAgain")}
@@ -207,6 +219,11 @@ function ResultContent() {
             {t("changeSettings")}
           </button>
         </div>
+
+        {/* Enter hint */}
+        <p className="text-center text-xs text-[var(--color-text-dim)]">
+          {t("pressEnter")}
+        </p>
 
         {/* Saved indicator / Stats link */}
         {session?.user && (
