@@ -16,8 +16,8 @@
       "wordDesc": "SW 엔지니어링 어휘",
       "phrase": "문장",
       "phraseDesc": "SW 엔지니어링 문장",
-      "shortCode": "숏 코드",
-      "shortCodeDesc": "코드 스니펫 & 연산자",
+      "code": "코드",
+      "codeDesc": "코드 스니펫",
       "variableName": "변수명",
       "variableNameDesc": "camel snake kebab Pascal"
     },
@@ -96,7 +96,7 @@
     "modes": {
       "word": "단어",
       "phrase": "문장",
-      "shortCode": "숏 코드",
+      "code": "코드",
       "variableName": "변수명"
     },
     "difficulty": "난이도",

@@ -90,7 +90,7 @@ export function getWords(
         (phrasesData as Record<string, string[]>)[difficulty] ?? [];
       return shuffle(phrases).map((p) => ({ display: p, target: p }));
     }
-    case "shortCode": {
+    case "code": {
       const lang = language ?? "jsts";
       const symbols =
         (shortCodeData as Record<string, string[]>)[lang] ?? [];

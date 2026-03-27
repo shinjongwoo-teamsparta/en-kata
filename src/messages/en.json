@@ -16,8 +16,8 @@
       "wordDesc": "SW engineering vocabulary",
       "phrase": "Phrase",
       "phraseDesc": "Dev phrases & sentences",
-      "shortCode": "Short Code",
-      "shortCodeDesc": "Code snippets & operators",
+      "code": "Code",
+      "codeDesc": "Code snippets",
       "variableName": "Variable Name",
       "variableNameDesc": "camel snake kebab Pascal"
     },
@@ -96,7 +96,7 @@
     "modes": {
       "word": "Word",
       "phrase": "Phrase",
-      "shortCode": "Short Code",
+      "code": "Code",
       "variableName": "Variable Name"
     },
     "difficulty": "Difficulty",

@@ -34,7 +34,7 @@
 - 난이도: easy / medium / hard
 
 ### Short Code Mode (숏 코드)
-- 코드에서 자주 쓰이는 짧은 코드 조각 & 연산자 (5~25자)
+- 코드에서 자주 쓰이는 짧은 코드 조각 (5~25자)
 - 언어 선택: `JS/TS` | `Python`
 - 예 (JS/TS): `() => {}`, `Record<K, V>`, `a ?? b`, `JSON.parse()`
 - 예 (Python): `lambda x: x`, `__init__`, `[x for x in xs]`, `@property`

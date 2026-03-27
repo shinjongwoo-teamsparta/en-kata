@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 const MODE_LABELS: Record<string, string> = {
   word: "Word",
   phrase: "Phrase",
-  shortCode: "Short Code",
+  code: "Code",
   variableName: "Variable Name",
 };
 

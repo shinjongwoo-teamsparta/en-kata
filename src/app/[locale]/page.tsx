@@ -14,11 +14,11 @@ import type {
 } from "~/lib/types";
 
 
-const MODE_IDS: GameMode[] = ["word", "phrase", "shortCode", "variableName"];
+const MODE_IDS: GameMode[] = ["word", "phrase", "code", "variableName"];
 const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
   phrase: '""',
-  shortCode: "</>",
+  code: "</>",
   variableName: "xY",
 };
 
@@ -58,7 +58,7 @@ const CONVENTION_IDS: NamingConvention[] = [
   "PascalCase",
 ];
 
-const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["shortCode", "variableName"]);
+const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["code", "variableName"]);
 
 type StepId = "mode" | "duration" | "difficulty" | "category" | "convention" | "language";
 
@@ -67,7 +67,7 @@ function getSteps(mode: GameMode): StepId[] {
   if (mode === "word") {
     steps.push("category");
   }
-  if (mode === "shortCode") {
+  if (mode === "code") {
     steps.push("language");
   }
   if (mode === "variableName") {
@@ -173,7 +173,7 @@ export default function HomePage() {
     if (mode === "variableName") {
       params.set("convention", convention);
     }
-    if (mode === "shortCode") params.set("language", language);
+    if (mode === "code") params.set("language", language);
     if (mode === "word") params.set("category", category);
     const showHint = localStorage.getItem("showHint") === "true";
     if (mode === "word" && showHint) params.set("showHint", "true");

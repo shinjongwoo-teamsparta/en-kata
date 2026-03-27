@@ -8,7 +8,7 @@ import { api } from "~/trpc/react";
 import { motion } from "framer-motion";
 import type { GameMode, Difficulty } from "~/lib/types";
 
-const MODES: GameMode[] = ["word", "phrase", "shortCode", "variableName"];
+const MODES: GameMode[] = ["word", "phrase", "code", "variableName"];
 const DIFFICULTIES: (Difficulty | "all")[] = ["all", "easy", "medium", "hard"];
 const DURATIONS: (number | "all")[] = ["all", 30, 60, 120];
 const PERIODS = ["all", "month", "week"] as const;
