@@ -98,8 +98,7 @@ export function getWords(
       return shuffle(symbols).map((s) => ({ display: s, target: s }));
     }
     case "variableName": {
-      const phrases =
-        (namingData as Record<string, string[]>)[difficulty] ?? [];
+      const phrases = namingData as string[];
       const conv = convention ?? "camelCase";
       return shuffle(phrases).map((p) => ({
         display: p,
