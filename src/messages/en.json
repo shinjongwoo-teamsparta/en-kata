@@ -13,10 +13,12 @@
     "modes": {
       "word": "Word",
       "wordDesc": "SW engineering vocabulary",
+      "phrase": "Phrase",
+      "phraseDesc": "Dev phrases & sentences",
       "symbol": "Symbol",
       "symbolDesc": "Code symbols & operators",
       "variableName": "Variable Name",
-      "variableNameDesc": "camel·snake·kebab·Pascal"
+      "variableNameDesc": "camel snake kebab Pascal"
     },
     "difficulties": {
       "easy": "easy",

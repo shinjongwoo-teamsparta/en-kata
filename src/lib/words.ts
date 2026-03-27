@@ -1,4 +1,5 @@
 import wordsData from "~/data/words.json";
+import phrasesData from "~/data/phrases.json";
 import symbolsData from "~/data/symbols.json";
 import namingData from "~/data/naming-phrases.json";
 import hintsData from "~/data/word-hints.json";
@@ -81,6 +82,11 @@ export function getWords(
           example: hint?.ex,
         };
       });
+    }
+    case "phrase": {
+      const phrases =
+        (phrasesData as Record<string, string[]>)[difficulty] ?? [];
+      return shuffle(phrases).map((p) => ({ display: p, target: p }));
     }
     case "symbol": {
       const symbols =

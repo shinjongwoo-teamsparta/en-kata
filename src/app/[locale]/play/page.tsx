@@ -147,29 +147,47 @@ function PlayContent() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.15 }}
             >
-              {currentTarget.split("").map((char, i) => {
-                let colorClass = "text-[var(--color-text-dim)]";
-                if (i < game.currentCharIndex) {
-                  colorClass =
-                    game.charStates[i] === "correct"
-                      ? "text-[var(--color-correct)]"
-                      : "text-[var(--color-incorrect)]";
-                }
-                const isCursor = i === game.currentCharIndex;
+              {(() => {
+                const words: { char: string; idx: number }[][] = [];
+                let current: { char: string; idx: number }[] = [];
+                currentTarget.split("").forEach((char, i) => {
+                  if (char === " " && current.length > 0) {
+                    current.push({ char, idx: i });
+                    words.push(current);
+                    current = [];
+                  } else {
+                    current.push({ char, idx: i });
+                  }
+                });
+                if (current.length > 0) words.push(current);
 
-                return (
-                  <span
-                    key={i}
-                    className={`relative inline-block ${colorClass} ${
-                      isCursor
-                        ? "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:animate-pulse after:bg-[var(--color-cursor)]"
-                        : ""
-                    }`}
-                  >
-                    {char === " " ? "\u00A0" : char}
+                return words.map((word, wi) => (
+                  <span key={wi} className="inline-flex whitespace-nowrap">
+                    {word.map(({ char, idx }) => {
+                      let colorClass = "text-[var(--color-text-dim)]";
+                      if (idx < game.currentCharIndex) {
+                        colorClass =
+                          game.charStates[idx] === "correct"
+                            ? "text-[var(--color-correct)]"
+                            : "text-[var(--color-incorrect)]";
+                      }
+                      const isCursor = idx === game.currentCharIndex;
+                      return (
+                        <span
+                          key={idx}
+                          className={`relative inline-block ${colorClass} ${
+                            isCursor
+                              ? "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:animate-pulse after:bg-[var(--color-cursor)]"
+                              : ""
+                          }`}
+                        >
+                          {char === " " ? "\u00A0" : char}
+                        </span>
+                      );
+                    })}
                   </span>
-                );
-              })}
+                ));
+              })()}
             </motion.div>
           </AnimatePresence>
 

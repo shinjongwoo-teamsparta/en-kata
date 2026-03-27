@@ -1,4 +1,4 @@
-export type GameMode = "word" | "symbol" | "variableName";
+export type GameMode = "word" | "phrase" | "symbol" | "variableName";
 export type Difficulty = "easy" | "medium" | "hard";
 export type NamingConvention = "camelCase" | "snake_case" | "kebab-case" | "PascalCase";
 export type WordCategory = "general" | "frontend" | "backend" | "devops" | "database";

@@ -13,10 +13,12 @@
     "modes": {
       "word": "단어",
       "wordDesc": "SW 엔지니어링 어휘",
+      "phrase": "문장",
+      "phraseDesc": "개발 문장 & 표현",
       "symbol": "기호",
       "symbolDesc": "코드 기호 & 연산자",
       "variableName": "변수명",
-      "variableNameDesc": "camel·snake·kebab·Pascal"
+      "variableNameDesc": "camel snake kebab Pascal"
     },
     "difficulties": {
       "easy": "쉬움",

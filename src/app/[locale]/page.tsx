@@ -9,9 +9,10 @@ import type {
   WordCategory,
 } from "~/lib/types";
 
-const MODE_IDS: GameMode[] = ["word", "symbol", "variableName"];
+const MODE_IDS: GameMode[] = ["word", "phrase", "symbol", "variableName"];
 const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
+  phrase: "\"\"",
   symbol: "{}",
   variableName: "xY",
 };
@@ -65,7 +66,7 @@ export default function HomePage() {
           <label className="text-sm text-[var(--color-text-dim)]">
             {t("mode")}
           </label>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {MODE_IDS.map((m) => (
               <button
                 key={m}
