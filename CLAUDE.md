@@ -1,2 +1,3 @@
 - use Korean for documentation overall
-  - except, git commit title must be English
+  - git commit title: English
+  - git commit body: Korean
