@@ -10,6 +10,7 @@ export interface GameSettings {
   duration: number; // seconds
   convention?: NamingConvention;
   category?: WordCategory;
+  showHint?: boolean;
 }
 
 export interface GameResult {
@@ -31,4 +32,6 @@ export interface GameResult {
 export interface WordItem {
   display: string; // what to show (for naming mode, shows the phrase)
   target: string; // what the user must type
+  definition?: string; // vocabulary definition
+  example?: string; // usage example
 }

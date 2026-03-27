@@ -7,6 +7,8 @@
     "difficulty": "난이도",
     "category": "카테고리",
     "convention": "네이밍 규칙",
+    "showHint": "어휘 힌트",
+    "showHintDesc": "각 단어의 설명과 용례를 표시합니다",
     "start": "타이핑 시작",
     "modes": {
       "word": "단어",

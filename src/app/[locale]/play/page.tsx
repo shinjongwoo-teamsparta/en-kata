@@ -27,6 +27,7 @@ function PlayContent() {
       convention:
         (searchParams.get("convention") as NamingConvention) ?? undefined,
       category: (searchParams.get("category") as WordCategory) ?? undefined,
+      showHint: searchParams.get("showHint") === "true",
     }),
     [searchParams],
   );
@@ -134,6 +135,29 @@ function PlayContent() {
               <span className="text-lg text-[var(--color-accent)]">
                 {displayText}
               </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Word hint (definition & example) */}
+        <AnimatePresence mode="wait">
+          {settings.showHint && game.currentWord?.definition && (
+            <motion.div
+              key={`hint-${game.currentWordIndex}`}
+              className="rounded-lg bg-[var(--color-bg-surface)] px-5 py-3 text-center"
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.15 }}
+            >
+              <p className="text-sm text-[var(--color-text)]">
+                {game.currentWord.definition}
+              </p>
+              {game.currentWord.example && (
+                <p className="mt-1 text-xs text-[var(--color-text-dim)] italic">
+                  {`"${game.currentWord.example}"`}
+                </p>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

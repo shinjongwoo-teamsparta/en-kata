@@ -7,6 +7,8 @@
     "difficulty": "difficulty",
     "category": "category",
     "convention": "convention",
+    "showHint": "Vocabulary Hints",
+    "showHintDesc": "Show definition & example for each word",
     "start": "Start Typing",
     "modes": {
       "word": "Word",

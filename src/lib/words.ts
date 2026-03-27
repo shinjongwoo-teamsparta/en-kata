@@ -1,6 +1,7 @@
 import wordsData from "~/data/words.json";
 import symbolsData from "~/data/symbols.json";
 import namingData from "~/data/naming-phrases.json";
+import hintsData from "~/data/word-hints.json";
 import type {
   Difficulty,
   GameMode,
@@ -8,6 +9,8 @@ import type {
   WordCategory,
   WordItem,
 } from "./types";
+
+const hints = hintsData as Record<string, { def: string; ex: string }>;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -60,7 +63,15 @@ export function getWords(
         (wordsData as Record<string, Record<string, string[]>>)[cat]?.[
           difficulty
         ] ?? [];
-      return shuffle(words).map((w) => ({ display: w, target: w }));
+      return shuffle(words).map((w) => {
+        const hint = hints[w];
+        return {
+          display: w,
+          target: w,
+          definition: hint?.def,
+          example: hint?.ex,
+        };
+      });
     }
     case "symbol": {
       const symbols =
