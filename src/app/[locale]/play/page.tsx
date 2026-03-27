@@ -39,6 +39,17 @@ function PlayContent() {
     }
   }, [game.status, game.start]);
 
+  // ESC to quit
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        router.push("/");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [router]);
+
   // Navigate to result when finished
   useEffect(() => {
     if (game.status === "finished" && game.result) {
