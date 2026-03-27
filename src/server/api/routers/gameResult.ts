@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const gameResultRouter = createTRPCRouter({
   save: protectedProcedure
@@ -103,4 +107,73 @@ export const gameResultRouter = createTRPCRouter({
       },
     };
   }),
+
+  // Leaderboard: top scores per mode/difficulty/duration
+  getLeaderboard: publicProcedure
+    .input(
+      z.object({
+        mode: z.enum(["word", "phrase", "shortCode", "variableName"]),
+        difficulty: z.enum(["easy", "medium", "hard"]).optional(),
+        duration: z.number().int().positive().optional(),
+        period: z.enum(["all", "week", "month"]).default("all"),
+        limit: z.number().int().min(1).max(50).default(20),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const where: Record<string, unknown> = { mode: input.mode };
+
+      if (input.difficulty) where.difficulty = input.difficulty;
+      if (input.duration) where.duration = input.duration;
+
+      if (input.period !== "all") {
+        const since = new Date();
+        if (input.period === "week") since.setDate(since.getDate() - 7);
+        else since.setDate(since.getDate() - 30);
+        where.createdAt = { gte: since };
+      }
+
+      // Get best WPM per user for this filter, then rank
+      const results = await ctx.db.gameResult.findMany({
+        where,
+        orderBy: { wpm: "desc" },
+        select: {
+          id: true,
+          userId: true,
+          wpm: true,
+          cpm: true,
+          accuracy: true,
+          completedWords: true,
+          duration: true,
+          difficulty: true,
+          createdAt: true,
+          user: {
+            select: { name: true, image: true },
+          },
+        },
+      });
+
+      // Keep only best score per user
+      const seen = new Set<string>();
+      const ranked = [];
+      for (const r of results) {
+        if (seen.has(r.userId)) continue;
+        seen.add(r.userId);
+        ranked.push(r);
+        if (ranked.length >= input.limit) break;
+      }
+
+      return ranked.map((r, i) => ({
+        rank: i + 1,
+        userId: r.userId,
+        userName: r.user.name ?? "Anonymous",
+        userImage: r.user.image,
+        wpm: r.wpm,
+        cpm: r.cpm,
+        accuracy: r.accuracy,
+        completedWords: r.completedWords,
+        duration: r.duration,
+        difficulty: r.difficulty,
+        createdAt: r.createdAt,
+      }));
+    }),
 });

@@ -87,12 +87,20 @@ export default function StatsPage() {
               {session.user.name}
             </p>
           </div>
-          <button
-            onClick={() => router.push("/")}
-            className="text-sm text-[var(--color-text-dim)] hover:text-[var(--color-text)]"
-          >
-            ← {t("goHome")}
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push("/leaderboard")}
+              className="text-sm text-[var(--color-primary)] hover:underline"
+            >
+              Leaderboard
+            </button>
+            <button
+              onClick={() => router.push("/")}
+              className="text-sm text-[var(--color-text-dim)] hover:text-[var(--color-text)]"
+            >
+              ← {t("goHome")}
+            </button>
+          </div>
         </div>
 
         {/* Overall Stats */}

@@ -160,5 +160,6 @@ AUTH_GITHUB_SECRET=     # GitHub OAuth App Secret
 
 ### Phase 3
 - [ ] 리더보드
-- [ ] 커스텀 단어장
+- [ ] 어휘집 분리
+- [ ] 사운드 에셋 추가
 - [ ] 멀티플레이어 (실시간 대전)

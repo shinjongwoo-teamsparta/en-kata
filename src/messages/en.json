@@ -77,6 +77,47 @@
     "loginRequired": "Please sign in to view your statistics.",
     "goHome": "Go home"
   },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "subtitle": "Top players by mode",
+    "rank": "#",
+    "player": "Player",
+    "wpm": "WPM",
+    "accuracy": "Accuracy",
+    "words": "Words",
+    "date": "Date",
+    "period": "Period",
+    "periods": {
+      "all": "All Time",
+      "month": "This Month",
+      "week": "This Week"
+    },
+    "mode": "Mode",
+    "modes": {
+      "word": "Word",
+      "phrase": "Phrase",
+      "shortCode": "Short Code",
+      "variableName": "Variable Name"
+    },
+    "difficulty": "Difficulty",
+    "difficulties": {
+      "all": "All",
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "duration": "Duration",
+    "durations": {
+      "all": "All",
+      "30": "30s",
+      "60": "60s",
+      "120": "120s"
+    },
+    "empty": "No records yet. Be the first!",
+    "you": "You",
+    "goHome": "Go home",
+    "viewLeaderboard": "Leaderboard"
+  },
   "settings": {
     "title": "Settings",
     "theme": "Theme",

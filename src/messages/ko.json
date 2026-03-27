@@ -77,6 +77,47 @@
     "loginRequired": "통계를 보려면 로그인이 필요합니다.",
     "goHome": "홈으로"
   },
+  "leaderboard": {
+    "title": "리더보드",
+    "subtitle": "모드별 최고 플레이어",
+    "rank": "#",
+    "player": "플레이어",
+    "wpm": "WPM",
+    "accuracy": "정확도",
+    "words": "단어",
+    "date": "날짜",
+    "period": "기간",
+    "periods": {
+      "all": "전체",
+      "month": "이번 달",
+      "week": "이번 주"
+    },
+    "mode": "모드",
+    "modes": {
+      "word": "단어",
+      "phrase": "문장",
+      "shortCode": "숏 코드",
+      "variableName": "변수명"
+    },
+    "difficulty": "난이도",
+    "difficulties": {
+      "all": "전체",
+      "easy": "쉬움",
+      "medium": "보통",
+      "hard": "어려움"
+    },
+    "duration": "시간",
+    "durations": {
+      "all": "전체",
+      "30": "30초",
+      "60": "60초",
+      "120": "120초"
+    },
+    "empty": "아직 기록이 없습니다. 첫 번째 기록을 세워보세요!",
+    "you": "나",
+    "goHome": "홈으로",
+    "viewLeaderboard": "리더보드"
+  },
   "settings": {
     "title": "설정",
     "theme": "테마",

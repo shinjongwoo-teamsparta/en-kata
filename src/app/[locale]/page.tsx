@@ -13,6 +13,7 @@ import type {
   WordCategory,
 } from "~/lib/types";
 
+
 const MODE_IDS: GameMode[] = ["word", "phrase", "shortCode", "variableName"];
 const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
@@ -135,7 +136,11 @@ export default function HomePage() {
 
   const selectDuration = (d: number) => {
     setDuration(d);
-    goNext();
+    if (isLastStep) {
+      handleStart(d);
+    } else {
+      goNext();
+    }
   };
 
   const selectDifficulty = (d: Difficulty) => {
@@ -158,10 +163,11 @@ export default function HomePage() {
     goNext();
   };
 
-  const handleStart = () => {
+  const handleStart = (overrideDuration?: number) => {
+    const finalDuration = overrideDuration ?? duration;
     const params = new URLSearchParams({
       mode,
-      duration: duration.toString(),
+      duration: finalDuration.toString(),
       difficulty: MODES_WITHOUT_DIFFICULTY.has(mode) ? "medium" : difficulty,
     });
     if (mode === "variableName") {
@@ -235,13 +241,15 @@ export default function HomePage() {
           case "mode":
             selectMode(MODE_IDS[focusIndex] ?? "word");
             break;
-          case "duration":
-            setDuration(DURATIONS[focusIndex] ?? 60);
+          case "duration": {
+            const selectedDuration = DURATIONS[focusIndex] ?? 60;
+            setDuration(selectedDuration);
             if (isLastStep) {
-              handleStart();
+              handleStart(selectedDuration);
             } else {
               goNext();
             }
+          }
             break;
           case "difficulty":
             selectDifficulty(DIFFICULTIES[focusIndex] ?? "medium");
@@ -286,6 +294,16 @@ export default function HomePage() {
             {t("title")}
           </h1>
           <p className="mt-2 text-[var(--color-text-dim)]">{t("subtitle")}</p>
+          <button
+            onClick={() => router.push("/leaderboard")}
+            className="mt-3 inline-flex items-center gap-1 text-sm text-[var(--color-primary)] hover:underline"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8 21h8m-4-4v4M6 17h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
+              <path d="M8 13V9m4 4V7m4 6v-2" />
+            </svg>
+            Leaderboard
+          </button>
         </div>
 
         {/* Step indicator */}
@@ -293,13 +311,12 @@ export default function HomePage() {
           {steps.map((_, i) => (
             <div
               key={i}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === stepIndex
+              className={`h-1.5 rounded-full transition-all duration-300 ${i === stepIndex
                   ? "w-8 bg-[var(--color-primary)]"
                   : i < stepIndex
                     ? "w-4 bg-[var(--color-primary)] opacity-40"
                     : "w-4 bg-[var(--color-border)]"
-              }`}
+                }`}
             />
           ))}
         </div>
@@ -338,18 +355,16 @@ export default function HomePage() {
                     <button
                       key={m}
                       onClick={() => selectMode(m)}
-                      className={`rounded-lg border p-4 text-left transition-all ${
-                        focusIndex === i
+                      className={`rounded-lg border p-4 text-left transition-all ${focusIndex === i
                           ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                      }`}
+                        }`}
                     >
                       <div
-                        className={`text-xl font-bold ${
-                          focusIndex === i
+                        className={`text-xl font-bold ${focusIndex === i
                             ? "text-[var(--color-primary)]"
                             : "text-[var(--color-text-dim)]"
-                        }`}
+                          }`}
                       >
                         {MODE_ICONS[m]}
                       </div>
@@ -371,11 +386,10 @@ export default function HomePage() {
                     <button
                       key={d}
                       onClick={() => selectDuration(d)}
-                      className={`rounded-lg border px-8 py-4 text-lg font-bold transition-all ${
-                        focusIndex === i
+                      className={`rounded-lg border px-8 py-4 text-lg font-bold transition-all ${focusIndex === i
                           ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                      }`}
+                        }`}
                     >
                       {d}s
                     </button>
@@ -390,11 +404,10 @@ export default function HomePage() {
                     <button
                       key={d}
                       onClick={() => selectDifficulty(d)}
-                      className={`rounded-lg border px-8 py-4 text-lg font-medium transition-all ${
-                        focusIndex === i
+                      className={`rounded-lg border px-8 py-4 text-lg font-medium transition-all ${focusIndex === i
                           ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                      }`}
+                        }`}
                     >
                       {t(`difficulties.${d}`)}
                     </button>
@@ -409,11 +422,10 @@ export default function HomePage() {
                     <button
                       key={c}
                       onClick={() => selectCategory(c)}
-                      className={`rounded-lg border px-6 py-3 text-sm font-medium transition-all ${
-                        focusIndex === i
+                      className={`rounded-lg border px-6 py-3 text-sm font-medium transition-all ${focusIndex === i
                           ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                      }`}
+                        }`}
                     >
                       {t(`categories.${c}`)}
                     </button>
@@ -428,11 +440,10 @@ export default function HomePage() {
                     <button
                       key={c}
                       onClick={() => selectConvention(c)}
-                      className={`rounded-lg border px-6 py-3 text-sm font-mono font-medium transition-all ${
-                        focusIndex === i
+                      className={`rounded-lg border px-6 py-3 text-sm font-mono font-medium transition-all ${focusIndex === i
                           ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                      }`}
+                        }`}
                     >
                       {c}
                     </button>
@@ -447,11 +458,10 @@ export default function HomePage() {
                     <button
                       key={l}
                       onClick={() => selectLanguage(l)}
-                      className={`flex items-center gap-2 rounded-lg border px-6 py-3 text-sm font-medium transition-all ${
-                        focusIndex === i
+                      className={`flex items-center gap-2 rounded-lg border px-6 py-3 text-sm font-medium transition-all ${focusIndex === i
                           ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
                           : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                      }`}
+                        }`}
                     >
                       {LANGUAGE_ICONS[l] ?? <FallbackLanguageIcon />}
                       {t(`languages.${l}`)}
@@ -467,16 +477,15 @@ export default function HomePage() {
         <div className="mt-8 flex items-center justify-between">
           <button
             onClick={goBack}
-            className={`rounded-lg px-5 py-2.5 text-sm font-medium text-[var(--color-text-dim)] transition-all hover:text-[var(--color-text-bright)] ${
-              stepIndex === 0 ? "invisible" : ""
-            }`}
+            className={`rounded-lg px-5 py-2.5 text-sm font-medium text-[var(--color-text-dim)] transition-all hover:text-[var(--color-text-bright)] ${stepIndex === 0 ? "invisible" : ""
+              }`}
           >
             ← {t("back")}
           </button>
 
           {isLastStep ? (
             <button
-              onClick={handleStart}
+              onClick={() => handleStart()}
               className="rounded-lg bg-[var(--color-primary)] px-10 py-3 text-lg font-bold text-[var(--color-bg)] transition-colors hover:bg-[var(--color-primary-hover)]"
             >
               {t("start")}
