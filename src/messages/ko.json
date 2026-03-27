@@ -1,0 +1,56 @@
+{
+  "home": {
+    "title": "en-kata",
+    "subtitle": "소프트웨어 엔지니어를 위한 타이핑 연습",
+    "mode": "모드",
+    "duration": "시간",
+    "difficulty": "난이도",
+    "category": "카테고리",
+    "convention": "네이밍 규칙",
+    "start": "타이핑 시작",
+    "modes": {
+      "word": "단어",
+      "wordDesc": "SW 엔지니어링 어휘",
+      "symbol": "기호",
+      "symbolDesc": "코드 기호 & 연산자",
+      "naming": "네이밍",
+      "namingDesc": "camelCase, snake_case, kebab-case"
+    },
+    "difficulties": {
+      "easy": "쉬움",
+      "medium": "보통",
+      "hard": "어려움"
+    },
+    "categories": {
+      "general": "일반",
+      "frontend": "프론트엔드",
+      "backend": "백엔드",
+      "devops": "DevOps",
+      "database": "데이터베이스"
+    }
+  },
+  "play": {
+    "wpm": "WPM",
+    "wordsCompleted": "{count}개 단어 완료",
+    "escToQuit": "esc로 나가기",
+    "loading": "로딩 중..."
+  },
+  "result": {
+    "title": "결과",
+    "wpmOverTime": "시간별 WPM",
+    "mostMissed": "가장 많이 틀린 문자",
+    "tryAgain": "다시 하기",
+    "changeSettings": "설정 변경",
+    "noData": "결과 데이터가 없습니다.",
+    "goBack": "돌아가기",
+    "stats": {
+      "wpm": "WPM",
+      "cpm": "CPM",
+      "accuracy": "정확도",
+      "words": "단어"
+    }
+  },
+  "common": {
+    "loading": "로딩 중..."
+  }
+}

@@ -1,7 +1,9 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo } from "react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "~/i18n/navigation";
 import { useTypingGame } from "~/hooks/useTypingGame";
 import type {
   Difficulty,
@@ -12,16 +14,21 @@ import type {
 } from "~/lib/types";
 
 function PlayContent() {
+  const t = useTranslations("play");
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const settings = useMemo<GameSettings>(() => ({
-    mode: (searchParams.get("mode") as GameMode) ?? "word",
-    duration: Number(searchParams.get("duration") ?? "60"),
-    difficulty: (searchParams.get("difficulty") as Difficulty) ?? "medium",
-    convention: (searchParams.get("convention") as NamingConvention) ?? undefined,
-    category: (searchParams.get("category") as WordCategory) ?? undefined,
-  }), [searchParams]);
+  const settings = useMemo<GameSettings>(
+    () => ({
+      mode: (searchParams.get("mode") as GameMode) ?? "word",
+      duration: Number(searchParams.get("duration") ?? "60"),
+      difficulty: (searchParams.get("difficulty") as Difficulty) ?? "medium",
+      convention:
+        (searchParams.get("convention") as NamingConvention) ?? undefined,
+      category: (searchParams.get("category") as WordCategory) ?? undefined,
+    }),
+    [searchParams],
+  );
 
   const game = useTypingGame(settings);
 
@@ -71,8 +78,9 @@ function PlayContent() {
             </span>
           </div>
           <div className="flex items-center gap-6">
-            <span className="text-[var(--color-primary)] text-lg font-bold">
-              {game.wpm} <span className="text-xs font-normal">WPM</span>
+            <span className="text-lg font-bold text-[var(--color-primary)]">
+              {game.wpm}{" "}
+              <span className="text-xs font-normal">{t("wpm")}</span>
             </span>
             <span
               className={`text-lg font-bold ${
@@ -134,12 +142,12 @@ function PlayContent() {
 
         {/* Progress */}
         <div className="flex items-center justify-between text-sm text-[var(--color-text-dim)]">
-          <span>{game.completedWords} words completed</span>
+          <span>{t("wordsCompleted", { count: game.completedWords })}</span>
           <button
             onClick={() => router.push("/")}
             className="text-[var(--color-text-dim)] transition-colors hover:text-[var(--color-text)]"
           >
-            esc to quit
+            {t("escToQuit")}
           </button>
         </div>
       </div>
@@ -148,11 +156,12 @@ function PlayContent() {
 }
 
 export default function PlayPage() {
+  const t = useTranslations("play");
   return (
     <Suspense
       fallback={
         <main className="flex min-h-screen items-center justify-center">
-          <span className="text-[var(--color-text-dim)]">Loading...</span>
+          <span className="text-[var(--color-text-dim)]">{t("loading")}</span>
         </main>
       }
     >

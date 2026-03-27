@@ -1,10 +1,13 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useMemo } from "react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "~/i18n/navigation";
 import type { GameResult } from "~/lib/types";
 
 function ResultContent() {
+  const t = useTranslations("result");
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -22,12 +25,12 @@ function ResultContent() {
     return (
       <main className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <p className="text-[var(--color-text-dim)]">No result data found.</p>
+          <p className="text-[var(--color-text-dim)]">{t("noData")}</p>
           <button
             onClick={() => router.push("/")}
             className="mt-4 text-[var(--color-primary)] hover:underline"
           >
-            Go back
+            {t("goBack")}
           </button>
         </div>
       </main>
@@ -41,19 +44,19 @@ function ResultContent() {
 
   const statCards = [
     {
-      label: "WPM",
+      label: t("stats.wpm"),
       value: result.wpm,
       color: "var(--color-primary)",
       large: true,
     },
     {
-      label: "CPM",
+      label: t("stats.cpm"),
       value: result.cpm,
       color: "var(--color-accent)",
       large: false,
     },
     {
-      label: "Accuracy",
+      label: t("stats.accuracy"),
       value: `${result.accuracy}%`,
       color:
         result.accuracy >= 95
@@ -64,7 +67,7 @@ function ResultContent() {
       large: false,
     },
     {
-      label: "Words",
+      label: t("stats.words"),
       value: result.completedWords,
       color: "var(--color-text)",
       large: false,
@@ -77,7 +80,7 @@ function ResultContent() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-[var(--color-text-bright)]">
-            Result
+            {t("title")}
           </h1>
           <p className="mt-1 text-sm text-[var(--color-text-dim)]">
             {result.mode}
@@ -112,7 +115,7 @@ function ResultContent() {
         {result.wpmTimeline.length > 1 && (
           <div className="rounded-xl bg-[var(--color-bg-surface)] p-5">
             <h2 className="mb-3 text-sm text-[var(--color-text-dim)]">
-              WPM over time
+              {t("wpmOverTime")}
             </h2>
             <div className="flex h-32 items-end gap-px">
               {result.wpmTimeline.map((point, i) => {
@@ -142,7 +145,7 @@ function ResultContent() {
         {topMistakes.length > 0 && (
           <div className="rounded-xl bg-[var(--color-bg-surface)] p-5">
             <h2 className="mb-3 text-sm text-[var(--color-text-dim)]">
-              Most missed characters
+              {t("mostMissed")}
             </h2>
             <div className="flex gap-3">
               {topMistakes.map(([char, count]) => (
@@ -177,13 +180,13 @@ function ResultContent() {
             }}
             className="flex-1 rounded-lg bg-[var(--color-primary)] py-3 font-bold text-[var(--color-bg)] transition-colors hover:bg-[var(--color-primary-hover)]"
           >
-            Try Again
+            {t("tryAgain")}
           </button>
           <button
             onClick={() => router.push("/")}
             className="flex-1 rounded-lg border border-[var(--color-border)] py-3 font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-bg-hover)]"
           >
-            Change Settings
+            {t("changeSettings")}
           </button>
         </div>
       </div>
@@ -192,11 +195,12 @@ function ResultContent() {
 }
 
 export default function ResultPage() {
+  const t = useTranslations("common");
   return (
     <Suspense
       fallback={
         <main className="flex min-h-screen items-center justify-center">
-          <span className="text-[var(--color-text-dim)]">Loading...</span>
+          <span className="text-[var(--color-text-dim)]">{t("loading")}</span>
         </main>
       }
     >

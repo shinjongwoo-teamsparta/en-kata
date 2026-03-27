@@ -1,0 +1,56 @@
+{
+  "home": {
+    "title": "en-kata",
+    "subtitle": "typing practice for software engineers",
+    "mode": "mode",
+    "duration": "duration",
+    "difficulty": "difficulty",
+    "category": "category",
+    "convention": "convention",
+    "start": "Start Typing",
+    "modes": {
+      "word": "Word",
+      "wordDesc": "SW engineering vocabulary",
+      "symbol": "Symbol",
+      "symbolDesc": "Code symbols & operators",
+      "naming": "Naming",
+      "namingDesc": "camelCase, snake_case, kebab-case"
+    },
+    "difficulties": {
+      "easy": "easy",
+      "medium": "medium",
+      "hard": "hard"
+    },
+    "categories": {
+      "general": "General",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "devops": "DevOps",
+      "database": "Database"
+    }
+  },
+  "play": {
+    "wpm": "WPM",
+    "wordsCompleted": "{count} words completed",
+    "escToQuit": "esc to quit",
+    "loading": "Loading..."
+  },
+  "result": {
+    "title": "Result",
+    "wpmOverTime": "WPM over time",
+    "mostMissed": "Most missed characters",
+    "tryAgain": "Try Again",
+    "changeSettings": "Change Settings",
+    "noData": "No result data found.",
+    "goBack": "Go back",
+    "stats": {
+      "wpm": "WPM",
+      "cpm": "CPM",
+      "accuracy": "Accuracy",
+      "words": "Words"
+    }
+  },
+  "common": {
+    "loading": "Loading..."
+  }
+}
