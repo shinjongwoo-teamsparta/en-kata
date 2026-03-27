@@ -36,6 +36,13 @@ function toKebabCase(phrase: string): string {
   return phrase.split(" ").join("-").toLowerCase();
 }
 
+function toPascalCase(phrase: string): string {
+  return phrase
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join("");
+}
+
 export function convertToConvention(
   phrase: string,
   convention: NamingConvention,
@@ -47,6 +54,8 @@ export function convertToConvention(
       return toSnakeCase(phrase);
     case "kebab-case":
       return toKebabCase(phrase);
+    case "PascalCase":
+      return toPascalCase(phrase);
   }
 }
 
@@ -78,7 +87,7 @@ export function getWords(
         (symbolsData as Record<string, string[]>)[difficulty] ?? [];
       return shuffle(symbols).map((s) => ({ display: s, target: s }));
     }
-    case "naming": {
+    case "variableName": {
       const phrases =
         (namingData as Record<string, string[]>)[difficulty] ?? [];
       const conv = convention ?? "camelCase";

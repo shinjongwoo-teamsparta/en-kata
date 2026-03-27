@@ -6,24 +6,18 @@ import { useRouter } from "~/i18n/navigation";
 import type {
   Difficulty,
   GameMode,
-  NamingConvention,
   WordCategory,
 } from "~/lib/types";
 
-const MODE_IDS: GameMode[] = ["word", "symbol", "naming"];
+const MODE_IDS: GameMode[] = ["word", "symbol", "variableName"];
 const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
   symbol: "{}",
-  naming: "xY",
+  variableName: "xY",
 };
 
 const DURATIONS = [30, 60, 120];
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
-const CONVENTION_IDS: NamingConvention[] = [
-  "camelCase",
-  "snake_case",
-  "kebab-case",
-];
 const CATEGORY_IDS: WordCategory[] = [
   "general",
   "frontend",
@@ -38,7 +32,6 @@ export default function HomePage() {
   const [mode, setMode] = useState<GameMode>("word");
   const [duration, setDuration] = useState(60);
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
-  const [convention, setConvention] = useState<NamingConvention>("camelCase");
   const [category, setCategory] = useState<WordCategory>("general");
   const handleStart = () => {
     const params = new URLSearchParams({
@@ -46,7 +39,10 @@ export default function HomePage() {
       duration: duration.toString(),
       difficulty,
     });
-    if (mode === "naming") params.set("convention", convention);
+    if (mode === "variableName") {
+      const convention = localStorage.getItem("namingConvention") ?? "camelCase";
+      params.set("convention", convention);
+    }
     if (mode === "word") params.set("category", category);
     const showHint = localStorage.getItem("showHint") === "true";
     if (mode === "word" && showHint) params.set("showHint", "true");
@@ -162,30 +158,6 @@ export default function HomePage() {
                   }`}
                 >
                   {t(`categories.${c}`)}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Convention (Naming mode only) */}
-        {mode === "naming" && (
-          <div className="space-y-3">
-            <label className="text-sm text-[var(--color-text-dim)]">
-              {t("convention")}
-            </label>
-            <div className="flex gap-3">
-              {CONVENTION_IDS.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setConvention(c)}
-                  className={`rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
-                    convention === c
-                      ? "border-[var(--color-accent)] bg-[var(--color-bg-surface)] text-[var(--color-accent)]"
-                      : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)]"
-                  }`}
-                >
-                  {c}
                 </button>
               ))}
             </div>

@@ -15,8 +15,8 @@
       "wordDesc": "SW 엔지니어링 어휘",
       "symbol": "기호",
       "symbolDesc": "코드 기호 & 연산자",
-      "naming": "네이밍",
-      "namingDesc": "camelCase, snake_case, kebab-case"
+      "variableName": "변수명",
+      "variableNameDesc": "camel·snake·kebab·Pascal"
     },
     "difficulties": {
       "easy": "쉬움",
@@ -57,7 +57,8 @@
     "theme": "테마",
     "language": "언어",
     "showHint": "어휘 힌트",
-    "showHintDesc": "각 단어의 설명과 용례를 표시합니다"
+    "showHintDesc": "각 단어의 설명과 용례를 표시합니다",
+    "convention": "네이밍 규칙"
   },
   "common": {
     "loading": "로딩 중..."

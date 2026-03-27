@@ -61,8 +61,6 @@ function PlayContent() {
   }, [game.status, game.result, router]);
 
   const currentTarget = game.currentWord?.target ?? "";
-  const displayText = game.currentWord?.display ?? "";
-  const isNaming = settings.mode === "naming";
 
   // Get upcoming words for preview
   const upcomingWords = game.words
@@ -122,22 +120,6 @@ function PlayContent() {
           </div>
         </div>
 
-        {/* Naming mode: show the phrase */}
-        <AnimatePresence>
-          {isNaming && displayText !== currentTarget && (
-            <motion.div
-              className="text-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <span className="text-lg text-[var(--color-accent)]">
-                {displayText}
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Word hint (definition & example) */}
         {settings.showHint && game.currentWord?.definition && (

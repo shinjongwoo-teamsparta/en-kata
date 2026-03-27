@@ -15,8 +15,8 @@
       "wordDesc": "SW engineering vocabulary",
       "symbol": "Symbol",
       "symbolDesc": "Code symbols & operators",
-      "naming": "Naming",
-      "namingDesc": "camelCase, snake_case, kebab-case"
+      "variableName": "Variable Name",
+      "variableNameDesc": "camel·snake·kebab·Pascal"
     },
     "difficulties": {
       "easy": "easy",
@@ -57,7 +57,8 @@
     "theme": "Theme",
     "language": "Language",
     "showHint": "Vocabulary Hints",
-    "showHintDesc": "Show definition & example for each word"
+    "showHintDesc": "Show definition & example for each word",
+    "convention": "Naming Convention"
   },
   "common": {
     "loading": "Loading..."

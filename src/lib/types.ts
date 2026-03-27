@@ -1,6 +1,6 @@
-export type GameMode = "word" | "symbol" | "naming";
+export type GameMode = "word" | "symbol" | "variableName";
 export type Difficulty = "easy" | "medium" | "hard";
-export type NamingConvention = "camelCase" | "snake_case" | "kebab-case";
+export type NamingConvention = "camelCase" | "snake_case" | "kebab-case" | "PascalCase";
 export type WordCategory = "general" | "frontend" | "backend" | "devops" | "database";
 export type GameStatus = "idle" | "playing" | "finished";
 
@@ -30,7 +30,7 @@ export interface GameResult {
 }
 
 export interface WordItem {
-  display: string; // what to show (for naming mode, shows the phrase)
+  display: string; // what to show (for variableName mode, shows the phrase)
   target: string; // what the user must type
   definition?: string; // vocabulary definition
   example?: string; // usage example
