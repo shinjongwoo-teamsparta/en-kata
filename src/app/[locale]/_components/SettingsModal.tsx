@@ -42,18 +42,18 @@ export function SettingsModal() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [selectedLocale, setSelectedLocale] = useState(locale);
-  const [showHint, setShowHint] = useState(false);
+  const [showKorean, setShowKorean] = useState(false);
   const [backspaceLock, setBackspaceLock] = useState(false);
   useEffect(() => {
     setMounted(true);
-    setShowHint(localStorage.getItem("showHint") === "true");
+    setShowKorean(localStorage.getItem("showKorean") === "true");
     setBackspaceLock(localStorage.getItem("backspaceLock") === "true");
   }, []);
 
-  const toggleHint = useCallback(() => {
-    setShowHint((prev) => {
+  const toggleKorean = useCallback(() => {
+    setShowKorean((prev) => {
       const next = !prev;
-      localStorage.setItem("showHint", String(next));
+      localStorage.setItem("showKorean", String(next));
       return next;
     });
   }, []);
@@ -180,27 +180,27 @@ export function SettingsModal() {
                   </div>
                 </div>
 
-                {/* Show Hint */}
+                {/* Show Korean */}
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-xs text-[var(--color-text-dim)]">
-                      {t("showHint")}
+                      {t("showKorean")}
                     </label>
                     <p className="text-[10px] text-[var(--color-text-dim)] opacity-60">
-                      {t("showHintDesc")}
+                      {t("showKoreanDesc")}
                     </p>
                   </div>
                   <button
-                    onClick={toggleHint}
+                    onClick={toggleKorean}
                     className={`relative h-6 w-10 rounded-full transition-colors ${
-                      showHint
+                      showKorean
                         ? "bg-[var(--color-primary)]"
                         : "bg-[var(--color-border)]"
                     }`}
                   >
                     <span
                       className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
-                        showHint ? "translate-x-4" : "translate-x-0"
+                        showKorean ? "translate-x-4" : "translate-x-0"
                       }`}
                     />
                   </button>

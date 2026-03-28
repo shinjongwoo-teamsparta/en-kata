@@ -2,7 +2,7 @@ import wordsData from "~/data/words.json";
 import phrasesData from "~/data/phrases.json";
 import shortCodeData from "~/data/short-codes.json";
 import namingData from "~/data/naming-phrases.json";
-import hintsData from "~/data/word-hints.json";
+import phraseKoreanData from "~/data/phrase-korean.json";
 import type {
   Difficulty,
   GameMode,
@@ -12,7 +12,7 @@ import type {
   WordItem,
 } from "./types";
 
-const hints = hintsData as Record<string, { def: string; ex: string }>;
+const phraseKorean = phraseKoreanData as Record<string, string>;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -75,20 +75,15 @@ export function getWords(
         (wordsData as Record<string, Record<string, string[]>>)[cat]?.[
           difficulty
         ] ?? [];
-      return shuffle(words).map((w) => {
-        const hint = hints[w];
-        return {
-          display: w,
-          target: w,
-          definition: hint?.def,
-          example: hint?.ex,
-        };
-      });
+      return shuffle(words).map((w) => ({
+        display: w,
+        target: w,
+      }));
     }
     case "phrase": {
       const phrases =
         (phrasesData as Record<string, string[]>)[difficulty] ?? [];
-      return shuffle(phrases).map((p) => ({ display: p, target: p }));
+      return shuffle(phrases).map((p) => ({ display: p, target: p, korean: phraseKorean[p] }));
     }
     case "code": {
       const lang = language ?? "typescript";

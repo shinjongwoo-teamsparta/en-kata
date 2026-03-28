@@ -31,7 +31,7 @@ function PlayContent() {
       category: (searchParams.get("category") as WordCategory) ?? undefined,
       language:
         (searchParams.get("language") as ShortCodeLanguage) ?? undefined,
-      showHint: searchParams.get("showHint") === "true",
+      showKorean: searchParams.get("showKorean") === "true",
     }),
     [searchParams],
   );
@@ -130,17 +130,12 @@ function PlayContent() {
         </div>
 
 
-        {/* Word hint (definition & example) */}
-        {settings.showHint && game.currentWord?.definition && (
+        {/* Korean translation */}
+        {settings.showKorean && game.currentWord?.korean && (
           <div className="rounded-lg bg-[var(--color-bg-surface)] px-5 py-3 text-center">
             <p className="text-sm text-[var(--color-text)]">
-              {game.currentWord.definition}
+              {game.currentWord.korean}
             </p>
-            {game.currentWord.example && (
-              <p className="mt-1 text-xs text-[var(--color-text-dim)] italic">
-                {`"${game.currentWord.example}"`}
-              </p>
-            )}
           </div>
         )}
 

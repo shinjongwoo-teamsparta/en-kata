@@ -161,8 +161,8 @@ export default function HomePage() {
     }
     if (mode === "code") params.set("language", language);
     if (mode === "word") params.set("category", category);
-    const showHint = localStorage.getItem("showHint") === "true";
-    if (mode === "word" && showHint) params.set("showHint", "true");
+    const showKorean = localStorage.getItem("showKorean") === "true";
+    if (mode === "phrase" && showKorean) params.set("showKorean", "true");
     router.push(`/play?${params.toString()}`);
   };
 

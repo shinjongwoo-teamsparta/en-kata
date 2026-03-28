@@ -27,11 +27,10 @@
 - SW 엔지니어링 관련 단어를 하나씩 타이핑
 - 카테고리: `general` | `frontend` | `backend` | `devops` | `database`
 - 난이도: easy / medium / hard
-- 어휘 힌트 토글 (단어 정의 & 사용 예시)
-
 ### Phrase Mode (문장)
 - 개발 관련 문장 & 표현 타이핑
 - 난이도: easy / medium / hard
+- 한국어 번역 병기 토글
 
 ### Short Code Mode (숏 코드)
 - 코드에서 자주 쓰이는 짧은 코드 조각 (5~25자)
@@ -57,7 +56,7 @@
 | 카테고리 | general / frontend / backend / devops / database | word 모드 전용 |
 | 언어 | TypeScript / Python | shortCode 모드 전용 |
 | 네이밍 컨벤션 | camelCase / snake_case / kebab-case / PascalCase | variableName 모드 전용, localStorage 저장 |
-| 어휘 힌트 | on / off | word 모드 전용, localStorage 저장 |
+| 한국어 번역 | on / off | phrase 모드 전용, localStorage 저장 |
 | 키보드 사운드 | on / off | Web Audio API, localStorage 저장 |
 | 테마 | Light / Dark / System | |
 | 언어 | English / 한국어 | |
@@ -114,7 +113,7 @@
 | `phrases.json` | 난이도별 개발 문장 |
 | `short-codes.json` | 언어별(TypeScript, Python) 숏 코드 조각 + 아이콘/라벨 메타데이터 |
 | `naming-phrases.json` | 네이밍 컨벤션 변환용 구문 |
-| `word-hints.json` | 단어 정의 & 사용 예시 (700+ 항목) |
+| `phrase-korean.json` | 문장 한국어 번역 |
 
 ---
 

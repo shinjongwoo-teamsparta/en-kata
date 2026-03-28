@@ -12,7 +12,7 @@ export interface GameSettings {
   convention?: NamingConvention;
   category?: WordCategory;
   language?: ShortCodeLanguage;
-  showHint?: boolean;
+  showKorean?: boolean;
 }
 
 export interface GameResult {
@@ -36,6 +36,5 @@ export interface GameResult {
 export interface WordItem {
   display: string; // what to show (for variableName mode, shows the phrase)
   target: string; // what the user must type
-  definition?: string; // vocabulary definition
-  example?: string; // usage example
+  korean?: string; // Korean translation
 }
