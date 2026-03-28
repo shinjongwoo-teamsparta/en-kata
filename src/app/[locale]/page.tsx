@@ -13,38 +13,19 @@ import type {
   ShortCodeLanguage,
   WordCategory,
 } from "~/lib/types";
-
-
-const MODE_IDS: GameMode[] = ["word", "phrase", "code", "variableName"];
-const MODE_ICONS: Record<GameMode, string> = {
-  word: "Aa",
-  phrase: '""',
-  code: "</>",
-  variableName: "xY",
-};
+import {
+  MODE_IDS,
+  MODE_ICONS,
+  DURATIONS,
+  DIFFICULTIES,
+  CATEGORY_IDS,
+  CONVENTION_IDS,
+  MODES_WITHOUT_DIFFICULTY,
+} from "~/lib/constants";
+import { LeaderboardIcon } from "~/lib/icons";
 
 const LANGUAGE_IDS = Object.keys(codeData) as ShortCodeLanguage[];
 const LANGUAGE_META = codeData as Record<string, { label: string; icon: string; codes: string[] }>;
-
-const DURATIONS = [30, 60, 120];
-const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
-const CATEGORY_IDS: WordCategory[] = [
-  "general",
-  "frontend",
-  "backend",
-  "devops",
-  "database",
-];
-
-// Modes that skip the difficulty step
-const CONVENTION_IDS: NamingConvention[] = [
-  "camelCase",
-  "snake_case",
-  "kebab-case",
-  "PascalCase",
-];
-
-const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["code", "variableName"]);
 
 type StepId = "mode" | "duration" | "difficulty" | "category" | "convention" | "language";
 
@@ -284,10 +265,7 @@ export default function HomePage() {
             onClick={() => router.push("/leaderboard")}
             className="mt-3 inline-flex items-center gap-1 text-sm text-[var(--color-primary)] hover:underline"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M8 21h8m-4-4v4M6 17h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
-              <path d="M8 13V9m4 4V7m4 6v-2" />
-            </svg>
+            <LeaderboardIcon />
             Leaderboard
           </button>
         </div>
