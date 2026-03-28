@@ -215,10 +215,10 @@ export default function HomePage() {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
+      if (e.key === "ArrowLeft" || e.key == "h") {
         e.preventDefault();
         setFocusIndex((i) => (i > 0 ? i - 1 : currentOptions.length - 1));
-      } else if (e.key === "ArrowRight") {
+      } else if (e.key === "ArrowRight" || e.key == "l") {
         e.preventDefault();
         setFocusIndex((i) => (i < currentOptions.length - 1 ? i + 1 : 0));
       } else if (e.key === "Enter") {
@@ -250,7 +250,7 @@ export default function HomePage() {
             selectLanguage(LANGUAGE_IDS[focusIndex] ?? "typescript");
             break;
         }
-      } else if (e.key === "Backspace") {
+      } else if (e.key === "Backspace" || e.key === "Escape") {
         e.preventDefault();
         goBack();
       }
