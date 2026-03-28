@@ -192,7 +192,7 @@ export function SettingsModal() {
                   </div>
                   <button
                     onClick={toggleKorean}
-                    className={`relative h-6 w-10 rounded-full transition-colors ${
+                    className={`shrink-0 relative h-6 w-10 rounded-full transition-colors ${
                       showKorean
                         ? "bg-[var(--color-primary)]"
                         : "bg-[var(--color-border)]"
@@ -218,7 +218,7 @@ export function SettingsModal() {
                   </div>
                   <button
                     onClick={toggleBackspaceLock}
-                    className={`relative h-6 w-10 rounded-full transition-colors ${
+                    className={`shrink-0 relative h-6 w-10 rounded-full transition-colors ${
                       backspaceLock
                         ? "bg-[var(--color-primary)]"
                         : "bg-[var(--color-border)]"
@@ -244,7 +244,7 @@ export function SettingsModal() {
                   </div>
                   <button
                     onClick={toggleSound}
-                    className={`relative h-6 w-10 rounded-full transition-colors ${
+                    className={`shrink-0 relative h-6 w-10 rounded-full transition-colors ${
                       soundEnabled
                         ? "bg-[var(--color-primary)]"
                         : "bg-[var(--color-border)]"
