@@ -36,7 +36,7 @@ export function Game({ settings, onFinish, onQuit }: GameProps) {
       return;
     }
 
-    if (key.backspace) {
+    if (key.backspace || key.delete) {
       engineRef.current.handleKey("Backspace");
       return;
     }
