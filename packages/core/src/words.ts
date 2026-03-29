@@ -1,8 +1,8 @@
-import wordsData from "~/data/words.json";
-import phrasesData from "~/data/phrases.json";
-import shortCodeData from "~/data/short-codes.json";
-import namingData from "~/data/naming-phrases.json";
-import phraseKoreanData from "~/data/phrase-korean.json";
+import wordsData from "../data/words.json" with { type: "json" };
+import phrasesData from "../data/phrases.json" with { type: "json" };
+import shortCodeData from "../data/short-codes.json" with { type: "json" };
+import namingData from "../data/naming-phrases.json" with { type: "json" };
+import phraseKoreanData from "../data/phrase-korean.json" with { type: "json" };
 import type {
   Difficulty,
   GameMode,
@@ -10,7 +10,7 @@ import type {
   ShortCodeLanguage,
   WordCategory,
   WordItem,
-} from "./types";
+} from "./types.js";
 
 const phraseKorean = phraseKoreanData as Record<string, string>;
 

@@ -2,19 +2,9 @@ import type {
   Difficulty,
   GameMode,
   NamingConvention,
+  ShortCodeLanguage,
   WordCategory,
-} from "~/lib/types";
-
-export const THEMES = [
-  { id: "light", label: "Light", icon: "☀️" },
-  { id: "system", label: "System", icon: "💻" },
-  { id: "dark", label: "Dark", icon: "🌙" },
-] as const;
-
-export const LOCALES = [
-  { id: "en" as const, label: "EN" },
-  { id: "ko" as const, label: "한국어" },
-];
+} from "./types.js";
 
 export const MODE_IDS: GameMode[] = ["word", "phrase", "code", "variableName"];
 
@@ -42,6 +32,16 @@ export const CONVENTION_IDS: NamingConvention[] = [
   "snake_case",
   "kebab-case",
   "PascalCase",
+];
+
+export const LANGUAGE_IDS: ShortCodeLanguage[] = [
+  "typescript",
+  "python",
+  "rust",
+  "go",
+  "sql",
+  "bash",
+  "c",
 ];
 
 export const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["code", "variableName"]);

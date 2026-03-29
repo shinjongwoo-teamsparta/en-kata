@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "~/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import codeData from "~/data/short-codes.json";
+import codeData from "@en-kata/core/data/short-codes.json";
 import type {
   Difficulty,
   GameMode,

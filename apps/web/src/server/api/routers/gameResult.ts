@@ -1,5 +1,5 @@
 import { z } from "zod";
-import shortCodeData from "~/data/short-codes.json";
+import shortCodeData from "@en-kata/core/data/short-codes.json";
 import {
   createTRPCRouter,
   protectedProcedure,

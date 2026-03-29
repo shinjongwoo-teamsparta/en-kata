@@ -1,51 +1,23 @@
 {
-  "name": "en-kata",
-  "version": "0.1.0",
+  "name": "@en-kata/monorepo",
   "private": true,
-  "type": "module",
   "scripts": {
-    "build": "next build",
-    "db:generate": "prisma migrate dev",
-    "db:migrate": "prisma migrate deploy",
-    "db:push": "prisma db push",
-    "db:studio": "prisma studio",
-    "dev": "next dev --turbo",
-    "postinstall": "prisma generate",
-    "preview": "next build && next start",
-    "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "dev": "pnpm --filter @en-kata/web dev",
+    "dev:cli": "pnpm --filter en-kata dev",
+    "build": "pnpm -r build",
+    "build:core": "pnpm --filter @en-kata/core build",
+    "build:cli": "pnpm --filter en-kata build",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @en-kata/web db:generate",
+    "db:migrate": "pnpm --filter @en-kata/web db:migrate",
+    "db:push": "pnpm --filter @en-kata/web db:push",
+    "db:studio": "pnpm --filter @en-kata/web db:studio"
   },
-  "dependencies": {
-    "@auth/prisma-adapter": "^2.11.1",
-    "@prisma/client": "^6.6.0",
-    "@t3-oss/env-nextjs": "^0.12.0",
-    "@tanstack/react-query": "^5.69.0",
-    "@trpc/client": "^11.0.0",
-    "@trpc/react-query": "^11.0.0",
-    "@trpc/server": "^11.0.0",
-    "framer-motion": "^12.38.0",
-    "next": "^15.2.3",
-    "next-auth": "5.0.0-beta.30",
-    "next-intl": "^4.8.3",
-    "next-themes": "^0.4.6",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "server-only": "^0.0.1",
-    "superjson": "^2.2.1",
-    "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.15",
-    "@types/node": "^20.14.10",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "postcss": "^8.5.3",
-    "prisma": "^6.6.0",
-    "tailwindcss": "^4.0.15",
-    "typescript": "^5.8.2"
-  },
-  "ct3aMetadata": {
-    "initVersion": "7.40.0"
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.1.8",
+      "@types/react-dom": "19.1.6"
+    }
   },
   "packageManager": "pnpm@9.14.2"
 }

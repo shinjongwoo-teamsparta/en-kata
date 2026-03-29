@@ -1,0 +1,43 @@
+{
+  "name": "en-kata",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Developer typing practice in your terminal",
+  "author": "shinjongwoo-teamsparta",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shinjongwoo-teamsparta/en-kata.git",
+    "directory": "apps/cli"
+  },
+  "keywords": [
+    "typing",
+    "practice",
+    "developer",
+    "terminal",
+    "cli",
+    "tui"
+  ],
+  "bin": {
+    "en-kata": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/index.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ink": "^5.1.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@en-kata/core": "workspace:*",
+    "@types/react": "^18.3.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.8.2"
+  }
+}
