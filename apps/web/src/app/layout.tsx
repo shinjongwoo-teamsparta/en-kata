@@ -7,6 +7,8 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "./_components/ThemeProvider";
 import { SessionProvider } from "next-auth/react";
 
+import { Analytics } from "@vercel/analytics/next"
+
 export const metadata: Metadata = {
   title: "en-kata | Typing Practice for Engineers",
   description:
@@ -54,6 +56,7 @@ export default function RootLayout({
   return (
     <html className={`${geistMono.variable}`} suppressHydrationWarning>
       <body className="min-h-screen">
+        <Analytics />
         <SessionProvider>
           <ThemeProvider>
             <TRPCReactProvider>{children}</TRPCReactProvider>
