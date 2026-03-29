@@ -29,6 +29,35 @@ const LANGUAGE_META = codeData as Record<string, { label: string; icon: string; 
 
 type StepId = "mode" | "duration" | "difficulty" | "category" | "convention" | "language";
 
+const MODE_PREFS_KEY = "modePreferences";
+
+type ModePrefs = {
+  [mode in GameMode]?: {
+    duration?: number;
+    difficulty?: Difficulty;
+    category?: WordCategory;
+    convention?: NamingConvention;
+    language?: ShortCodeLanguage;
+  };
+};
+
+function loadModePrefs(): ModePrefs {
+  try {
+    const raw = localStorage.getItem(MODE_PREFS_KEY);
+    return raw ? (JSON.parse(raw) as ModePrefs) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveModePrefs(mode: GameMode, prefs: ModePrefs[GameMode]) {
+  try {
+    const all = loadModePrefs();
+    all[mode] = prefs;
+    localStorage.setItem(MODE_PREFS_KEY, JSON.stringify(all));
+  } catch { /* noop */ }
+}
+
 function getSteps(mode: GameMode): StepId[] {
   const steps: StepId[] = ["mode"];
   if (mode === "word") {
@@ -96,7 +125,15 @@ export default function HomePage() {
 
   const selectMode = (m: GameMode) => {
     setMode(m);
-    // Reset step index to 1 (next step after mode)
+    // Restore cached preferences for this mode
+    const prefs = loadModePrefs()[m];
+    if (prefs) {
+      if (prefs.duration && DURATIONS.includes(prefs.duration)) setDuration(prefs.duration);
+      if (prefs.difficulty && DIFFICULTIES.includes(prefs.difficulty)) setDifficulty(prefs.difficulty);
+      if (prefs.category && CATEGORY_IDS.includes(prefs.category)) setCategory(prefs.category);
+      if (prefs.convention && CONVENTION_IDS.includes(prefs.convention)) setConvention(prefs.convention);
+      if (prefs.language && LANGUAGE_IDS.includes(prefs.language)) setLanguage(prefs.language);
+    }
     setDirection(1);
     setStepIndex(1);
   };
@@ -132,6 +169,16 @@ export default function HomePage() {
 
   const handleStart = (overrideDuration?: number) => {
     const finalDuration = overrideDuration ?? duration;
+
+    // Cache current selections for this mode
+    saveModePrefs(mode, {
+      duration: finalDuration,
+      difficulty,
+      category,
+      convention,
+      language,
+    });
+
     const params = new URLSearchParams({
       mode,
       duration: finalDuration.toString(),
