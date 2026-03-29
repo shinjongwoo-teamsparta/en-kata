@@ -23,40 +23,12 @@ import {
   MODES_WITHOUT_DIFFICULTY,
 } from "~/lib/constants";
 import { LeaderboardIcon } from "~/lib/icons";
+import { useSettingsStore } from "~/stores/useSettingsStore";
 
 const LANGUAGE_IDS = Object.keys(codeData) as ShortCodeLanguage[];
 const LANGUAGE_META = codeData as Record<string, { label: string; icon: string; codes: string[] }>;
 
 type StepId = "mode" | "duration" | "difficulty" | "category" | "convention" | "language";
-
-const MODE_PREFS_KEY = "modePreferences";
-
-type ModePrefs = {
-  [mode in GameMode]?: {
-    duration?: number;
-    difficulty?: Difficulty;
-    category?: WordCategory;
-    convention?: NamingConvention;
-    language?: ShortCodeLanguage;
-  };
-};
-
-function loadModePrefs(): ModePrefs {
-  try {
-    const raw = localStorage.getItem(MODE_PREFS_KEY);
-    return raw ? (JSON.parse(raw) as ModePrefs) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveModePrefs(mode: GameMode, prefs: ModePrefs[GameMode]) {
-  try {
-    const all = loadModePrefs();
-    all[mode] = prefs;
-    localStorage.setItem(MODE_PREFS_KEY, JSON.stringify(all));
-  } catch { /* noop */ }
-}
 
 function getSteps(mode: GameMode): StepId[] {
   const steps: StepId[] = ["mode"];
@@ -95,17 +67,13 @@ export default function HomePage() {
   const t = useTranslations("home");
   const router = useRouter();
 
-  const [mode, setMode] = useState<GameMode>("word");
-  const [duration, setDuration] = useState(60);
-  const [difficulty, setDifficulty] = useState<Difficulty>("medium");
-  const [category, setCategory] = useState<WordCategory>("general");
-  const [convention, setConvention] = useState<NamingConvention>("camelCase");
-  const [language, setLanguage] = useState<ShortCodeLanguage>("typescript");
+  const store = useSettingsStore();
+
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [focusIndex, setFocusIndex] = useState(0);
 
-  const steps = useMemo(() => getSteps(mode), [mode]);
+  const steps = useMemo(() => getSteps(store.mode), [store.mode]);
   const currentStep = steps[stepIndex] ?? "mode";
   const isLastStep = stepIndex === steps.length - 1;
 
@@ -124,22 +92,14 @@ export default function HomePage() {
   }, [stepIndex]);
 
   const selectMode = (m: GameMode) => {
-    setMode(m);
-    // Restore cached preferences for this mode
-    const prefs = loadModePrefs()[m];
-    if (prefs) {
-      if (prefs.duration && DURATIONS.includes(prefs.duration)) setDuration(prefs.duration);
-      if (prefs.difficulty && DIFFICULTIES.includes(prefs.difficulty)) setDifficulty(prefs.difficulty);
-      if (prefs.category && CATEGORY_IDS.includes(prefs.category)) setCategory(prefs.category);
-      if (prefs.convention && CONVENTION_IDS.includes(prefs.convention)) setConvention(prefs.convention);
-      if (prefs.language && LANGUAGE_IDS.includes(prefs.language)) setLanguage(prefs.language);
-    }
+    store.setMode(m);
+    store.restoreModePrefs(m);
     setDirection(1);
     setStepIndex(1);
   };
 
   const selectDuration = (d: number) => {
-    setDuration(d);
+    store.setDuration(d);
     if (isLastStep) {
       handleStart(d);
     } else {
@@ -148,50 +108,31 @@ export default function HomePage() {
   };
 
   const selectDifficulty = (d: Difficulty) => {
-    setDifficulty(d);
+    store.setDifficulty(d);
     goNext();
   };
 
   const selectCategory = (c: WordCategory) => {
-    setCategory(c);
+    store.setCategory(c);
     goNext();
   };
 
   const selectConvention = (c: NamingConvention) => {
-    setConvention(c);
+    store.setConvention(c);
     goNext();
   };
 
   const selectLanguage = (l: ShortCodeLanguage) => {
-    setLanguage(l);
+    store.setLanguage(l);
     goNext();
   };
 
   const handleStart = (overrideDuration?: number) => {
-    const finalDuration = overrideDuration ?? duration;
-
-    // Cache current selections for this mode
-    saveModePrefs(mode, {
-      duration: finalDuration,
-      difficulty,
-      category,
-      convention,
-      language,
-    });
-
-    const params = new URLSearchParams({
-      mode,
-      duration: finalDuration.toString(),
-      difficulty: MODES_WITHOUT_DIFFICULTY.has(mode) ? "medium" : difficulty,
-    });
-    if (mode === "variableName") {
-      params.set("convention", convention);
+    if (overrideDuration != null) {
+      store.setDuration(overrideDuration);
     }
-    if (mode === "code") params.set("language", language);
-    if (mode === "word") params.set("category", category);
-    const showKorean = localStorage.getItem("showKorean") === "true";
-    if (mode === "phrase" && showKorean) params.set("showKorean", "true");
-    router.push(`/play?${params.toString()}`);
+    store.saveModePrefs();
+    router.push("/play");
   };
 
   // Options count for the current step
@@ -219,26 +160,26 @@ export default function HomePage() {
     let idx = 0;
     switch (currentStep) {
       case "mode":
-        idx = MODE_IDS.indexOf(mode);
+        idx = MODE_IDS.indexOf(store.mode);
         break;
       case "duration":
-        idx = DURATIONS.indexOf(duration);
+        idx = DURATIONS.indexOf(store.duration);
         break;
       case "difficulty":
-        idx = DIFFICULTIES.indexOf(difficulty);
+        idx = DIFFICULTIES.indexOf(store.difficulty);
         break;
       case "category":
-        idx = CATEGORY_IDS.indexOf(category);
+        idx = CATEGORY_IDS.indexOf(store.category);
         break;
       case "convention":
-        idx = CONVENTION_IDS.indexOf(convention);
+        idx = CONVENTION_IDS.indexOf(store.convention);
         break;
       case "language":
-        idx = LANGUAGE_IDS.indexOf(language);
+        idx = LANGUAGE_IDS.indexOf(store.language);
         break;
     }
     setFocusIndex(idx >= 0 ? idx : 0);
-  }, [currentStep, mode, duration, difficulty, category, convention, language]);
+  }, [currentStep, store.mode, store.duration, store.difficulty, store.category, store.convention, store.language]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -257,7 +198,7 @@ export default function HomePage() {
             break;
           case "duration": {
             const selectedDuration = DURATIONS[focusIndex] ?? 60;
-            setDuration(selectedDuration);
+            store.setDuration(selectedDuration);
             if (isLastStep) {
               handleStart(selectedDuration);
             } else {
@@ -289,14 +230,14 @@ export default function HomePage() {
 
   // Summary line showing current selections
   const summaryParts: string[] = [];
-  if (stepIndex > 0) summaryParts.push(t(`modes.${mode}`));
-  if (stepIndex > 1) summaryParts.push(`${duration}s`);
+  if (stepIndex > 0) summaryParts.push(t(`modes.${store.mode}`));
+  if (stepIndex > 1) summaryParts.push(`${store.duration}s`);
   if (
     stepIndex > 2 &&
     steps.includes("difficulty") &&
     steps.indexOf("difficulty") < stepIndex
   ) {
-    summaryParts.push(t(`difficulties.${difficulty}`));
+    summaryParts.push(t(`difficulties.${store.difficulty}`));
   }
 
   return (

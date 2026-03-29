@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "~/i18n/navigation";
-import { useSearchParams } from "next/navigation";
 import { startTransition } from "react";
 
 const locales = [
@@ -16,16 +15,13 @@ export function LocaleSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [selected, setSelected] = useState(locale);
 
   const switchTo = (next: "en" | "ko") => {
     if (next !== selected) {
       setSelected(next);
       startTransition(() => {
-        const qs = searchParams.toString();
-        const href = qs ? `${pathname}?${qs}` : pathname;
-        router.replace(href, { locale: next });
+        router.replace(pathname, { locale: next });
       });
     }
   };

@@ -1,28 +1,17 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { useRouter } from "~/i18n/navigation";
 import { api } from "~/trpc/react";
-import type { GameResult } from "~/lib/types";
 import { SignupNudge } from "../_components/SignupNudge";
+import { useGameResultStore } from "~/stores/useGameResultStore";
 
 function ResultContent() {
   const t = useTranslations("result");
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const result = useMemo<GameResult | null>(() => {
-    const data = searchParams.get("data");
-    if (!data) return null;
-    try {
-      return JSON.parse(decodeURIComponent(data)) as GameResult;
-    } catch {
-      return null;
-    }
-  }, [searchParams]);
+  const result = useGameResultStore((s) => s.result);
 
   // Auto-save result for logged-in users
   const { data: session } = useSession();
@@ -38,15 +27,7 @@ function ResultContent() {
 
   const navigateToRetry = useCallback(() => {
     if (!result) return;
-    const params = new URLSearchParams({
-      mode: result.mode,
-      duration: result.duration.toString(),
-      difficulty: result.difficulty,
-    });
-    if (result.convention) params.set("convention", result.convention);
-    if (result.language) params.set("language", result.language);
-    if (result.category) params.set("category", result.category);
-    router.push(`/play?${params.toString()}`);
+    router.push("/play");
   }, [result, router]);
 
   // Enter to restart
@@ -253,16 +234,5 @@ function ResultContent() {
 }
 
 export default function ResultPage() {
-  const t = useTranslations("common");
-  return (
-    <Suspense
-      fallback={
-        <main className="flex min-h-screen items-center justify-center">
-          <span className="text-[var(--color-text-dim)]">{t("loading")}</span>
-        </main>
-      }
-    >
-      <ResultContent />
-    </Suspense>
-  );
+  return <ResultContent />;
 }

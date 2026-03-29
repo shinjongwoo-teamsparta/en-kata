@@ -23,10 +23,10 @@ export function useTypingGame(settings: GameSettings, callbacks?: TypingGameCall
   });
 
   const initEngine = useCallback(
-    (backspaceLock: boolean) => {
+    () => {
       engineRef.current?.destroy();
       const engine = new TypingGameEngine(
-        { ...settings, backspaceLock },
+        settings,
         {
           onStateChange: (s) => setState({ ...s }),
           onCorrectKey: () => callbacksRef.current?.onCorrectKey?.(),
@@ -61,8 +61,7 @@ export function useTypingGame(settings: GameSettings, callbacks?: TypingGameCall
   }, []);
 
   const start = useCallback(() => {
-    const backspaceLock = localStorage.getItem("backspaceLock") === "true";
-    const engine = initEngine(backspaceLock);
+    const engine = initEngine();
     engine.start();
   }, [initEngine]);
 

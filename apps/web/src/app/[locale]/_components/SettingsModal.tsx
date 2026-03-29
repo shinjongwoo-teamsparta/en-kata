@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "~/i18n/navigation";
-import { useSearchParams } from "next/navigation";
 import { startTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -14,6 +13,7 @@ import {
 } from "~/hooks/useKeyboardSound";
 import { THEMES, LOCALES } from "~/lib/constants";
 import { GearIcon, GitHubIcon } from "~/lib/icons";
+import { useSettingsStore } from "~/stores/useSettingsStore";
 
 export function SettingsModal() {
   const t = useTranslations("settings");
@@ -21,7 +21,6 @@ export function SettingsModal() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const { data: session } = useSession();
   const {
@@ -30,40 +29,24 @@ export function SettingsModal() {
     preset: soundPreset,
     setPreset: setSoundPreset,
   } = useKeyboardSound();
+
+  const showKorean = useSettingsStore((s) => s.showKorean);
+  const backspaceLock = useSettingsStore((s) => s.backspaceLock);
+  const toggleKorean = useSettingsStore((s) => s.toggleShowKorean);
+  const toggleBackspaceLock = useSettingsStore((s) => s.toggleBackspaceLock);
+
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [selectedLocale, setSelectedLocale] = useState(locale);
-  const [showKorean, setShowKorean] = useState(false);
-  const [backspaceLock, setBackspaceLock] = useState(false);
   useEffect(() => {
     setMounted(true);
-    setShowKorean(localStorage.getItem("showKorean") === "true");
-    setBackspaceLock(localStorage.getItem("backspaceLock") === "true");
-  }, []);
-
-  const toggleKorean = useCallback(() => {
-    setShowKorean((prev) => {
-      const next = !prev;
-      localStorage.setItem("showKorean", String(next));
-      return next;
-    });
-  }, []);
-
-  const toggleBackspaceLock = useCallback(() => {
-    setBackspaceLock((prev) => {
-      const next = !prev;
-      localStorage.setItem("backspaceLock", String(next));
-      return next;
-    });
   }, []);
 
   const switchLocale = (next: "en" | "ko") => {
     if (next !== selectedLocale) {
       setSelectedLocale(next);
       startTransition(() => {
-        const qs = searchParams.toString();
-        const href = qs ? `${pathname}?${qs}` : pathname;
-        router.replace(href, { locale: next });
+        router.replace(pathname, { locale: next });
       });
     }
   };
