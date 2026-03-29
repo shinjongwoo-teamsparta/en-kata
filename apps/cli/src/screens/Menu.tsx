@@ -18,6 +18,7 @@ import {
   LANGUAGE_IDS,
   MODES_WITHOUT_DIFFICULTY,
 } from "@en-kata/core";
+import { useUpdateCheck } from "../hooks/useUpdateCheck.js";
 
 type Step = "mode" | "sub" | "difficulty" | "duration";
 
@@ -53,6 +54,7 @@ interface MenuProps {
 
 export function Menu({ onStart }: MenuProps) {
   const { exit } = useApp();
+  const update = useUpdateCheck();
   const [mode, setMode] = useState<GameMode>("word");
   const [subIndex, setSubIndex] = useState(0);
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
@@ -239,6 +241,15 @@ export function Menu({ onStart }: MenuProps) {
           {` [${DURATIONS[durationIndex]}s]`}
         </Text>
       </Box>
+
+      {update && (
+        <Box marginTop={1} flexDirection="column" borderStyle="round" borderColor="yellow" borderLeft={false} borderRight={false} paddingX={1}>
+          <Text bold color="yellow">
+            Update available: {update.current} → {update.latest}
+          </Text>
+          <Text bold color="cyan">npm i -g en-kata</Text>
+        </Box>
+      )}
     </Box>
   );
 }
