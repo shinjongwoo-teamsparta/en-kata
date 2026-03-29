@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "~/i18n/navigation";
 import { useTypingGame } from "~/hooks/useTypingGame";
 import { useKeyboardSound } from "~/hooks/useKeyboardSound";
+import { useSession } from "next-auth/react";
+import { incrementPlayCount } from "../_components/SignupNudge";
 import type {
   Difficulty,
   GameMode,
@@ -62,12 +64,16 @@ function PlayContent() {
   }, [router]);
 
   // Navigate to result when finished
+  const { data: session } = useSession();
   useEffect(() => {
     if (game.status === "finished" && game.result) {
+      if (!session?.user) {
+        incrementPlayCount();
+      }
       const encoded = encodeURIComponent(JSON.stringify(game.result));
       router.push(`/result?data=${encoded}`);
     }
-  }, [game.status, game.result, router]);
+  }, [game.status, game.result, router, session]);
 
   const currentTarget = game.currentWord?.target ?? "";
 

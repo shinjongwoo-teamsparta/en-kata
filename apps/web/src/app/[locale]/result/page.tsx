@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "~/i18n/navigation";
 import { api } from "~/trpc/react";
 import type { GameResult } from "~/lib/types";
+import { SignupNudge } from "../_components/SignupNudge";
 
 function ResultContent() {
   const t = useTranslations("result");
@@ -243,6 +244,9 @@ function ResultContent() {
             </button>
           </div>
         )}
+
+        {/* Signup nudge for non-logged-in users */}
+        {!session?.user && <SignupNudge />}
       </div>
     </main>
   );

@@ -56,6 +56,23 @@
     "goBack": "Go back",
     "saved": "Result saved!",
     "viewStats": "View Stats →",
+    "signupNudge": {
+      "softTitle": "Want to save this result?",
+      "softDesc": "Sign in to track your WPM, accuracy, and progress over time.",
+      "mediumTitle": "You've played {count} times!",
+      "mediumDesc": "Your records aren't being saved yet. Sign in to unlock:",
+      "mediumFeature1": "Auto-save every game result",
+      "mediumFeature2": "WPM trends & detailed statistics",
+      "mediumFeature3": "Compete on the leaderboard",
+      "strongTitle": "{count} results gone unsaved",
+      "strongDesc": "Sign in now to start saving and analyzing all your future records.",
+      "strongFeature1": "Best & average stats by mode",
+      "strongFeature2": "30-day progress dashboard",
+      "strongFeature3": "Global leaderboard ranking",
+      "signIn": "Sign in with GitHub",
+      "signInSub": "Takes 3 seconds",
+      "dismiss": "Maybe later"
+    },
     "stats": {
       "wpm": "WPM",
       "cpm": "CPM",

@@ -56,6 +56,23 @@
     "goBack": "돌아가기",
     "saved": "결과 저장됨!",
     "viewStats": "통계 보기 →",
+    "signupNudge": {
+      "softTitle": "이 기록, 저장하고 싶지 않으세요?",
+      "softDesc": "로그인하면 매 게임의 WPM, 정확도, 성장 추이를 모두 기록할 수 있어요.",
+      "mediumTitle": "벌써 {count}번째 플레이!",
+      "mediumDesc": "지금까지의 기록이 저장되지 않고 있어요. 로그인하면 이런 걸 할 수 있어요:",
+      "mediumFeature1": "매 게임 결과 자동 저장",
+      "mediumFeature2": "WPM 성장 추이 & 상세 통계",
+      "mediumFeature3": "다른 개발자와 리더보드 경쟁",
+      "strongTitle": "{count}번의 기록이 사라지고 있어요",
+      "strongDesc": "지금 로그인하면 앞으로의 모든 기록을 저장하고 분석할 수 있어요.",
+      "strongFeature1": "모드별 최고 기록 & 평균 통계",
+      "strongFeature2": "30일 성장 추이 대시보드",
+      "strongFeature3": "글로벌 리더보드 순위 확인",
+      "signIn": "GitHub으로 로그인",
+      "signInSub": "3초면 완료",
+      "dismiss": "나중에 할게요"
+    },
     "stats": {
       "wpm": "WPM",
       "cpm": "CPM",
