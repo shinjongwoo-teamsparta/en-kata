@@ -10,7 +10,7 @@ import type {
   ShortCodeLanguage,
   WordCategory,
   WordItem,
-} from "./types.js";
+} from "./types";
 
 const phraseKorean = phraseKoreanData as Record<string, string>;
 

@@ -4,7 +4,7 @@ import type {
   NamingConvention,
   ShortCodeLanguage,
   WordCategory,
-} from "./types.js";
+} from "./types";
 
 export const MODE_IDS: GameMode[] = ["word", "phrase", "code", "variableName"];
 

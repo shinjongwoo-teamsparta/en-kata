@@ -1,5 +1,5 @@
-import type { GameResult, GameSettings, TypingGameState } from "./types.js";
-import { getWords } from "./words.js";
+import type { GameResult, GameSettings, TypingGameState } from "./types";
+import { getWords } from "./words";
 
 export interface EngineCallbacks {
   onCorrectKey?: () => void;
