@@ -127,7 +127,7 @@ export default function PlayClient() {
         {/* Typing area */}
         <div className="rounded-xl bg-[var(--color-bg-surface)] p-8">
           {/* Current word */}
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout">
             <motion.div
               key={game.currentWordIndex}
               className="flex flex-wrap items-center justify-center gap-0 text-3xl leading-relaxed"
@@ -184,7 +184,7 @@ export default function PlayClient() {
           </AnimatePresence>
 
           {/* Upcoming words */}
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout">
             <motion.div
               key={game.currentWordIndex}
               className="mt-6 flex flex-wrap justify-center gap-3 text-lg text-[var(--color-text-dim)] opacity-40"
