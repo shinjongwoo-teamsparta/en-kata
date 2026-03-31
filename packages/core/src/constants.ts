@@ -1,18 +1,16 @@
 import type {
   Difficulty,
   GameMode,
-  NamingConvention,
   ShortCodeLanguage,
   WordCategory,
 } from "./types";
 
-export const MODE_IDS: GameMode[] = ["word", "phrase", "code", "variableName", "paragraph"];
+export const MODE_IDS: GameMode[] = ["word", "phrase", "code", "paragraph"];
 
 export const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
   phrase: '""',
   code: "</>",
-  variableName: "xY",
   paragraph: "¶",
 };
 
@@ -28,13 +26,6 @@ export const CATEGORY_IDS: WordCategory[] = [
   "database",
 ];
 
-export const CONVENTION_IDS: NamingConvention[] = [
-  "camelCase",
-  "snake_case",
-  "kebab-case",
-  "PascalCase",
-];
-
 export const LANGUAGE_IDS: ShortCodeLanguage[] = [
   "typescript",
   "python",
@@ -45,4 +36,4 @@ export const LANGUAGE_IDS: ShortCodeLanguage[] = [
   "c",
 ];
 
-export const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["code", "variableName"]);
+export const MODES_WITHOUT_DIFFICULTY = new Set<GameMode>(["code"]);

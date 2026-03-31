@@ -12,12 +12,9 @@ export const gameResultRouter = createTRPCRouter({
   save: protectedProcedure
     .input(
       z.object({
-        mode: z.enum(["word", "phrase", "code", "variableName", "paragraph"]),
+        mode: z.enum(["word", "phrase", "code", "paragraph"]),
         difficulty: z.enum(["easy", "medium", "hard"]),
         duration: z.number().int().positive(),
-        convention: z
-          .enum(["camelCase", "snake_case", "kebab-case", "PascalCase"])
-          .optional(),
         language: z.enum(shortCodeLanguages).optional(),
         category: z
           .enum(["general", "frontend", "backend", "devops", "database"])
@@ -115,7 +112,7 @@ export const gameResultRouter = createTRPCRouter({
   getLeaderboard: publicProcedure
     .input(
       z.object({
-        mode: z.enum(["word", "phrase", "code", "variableName", "paragraph"]),
+        mode: z.enum(["word", "phrase", "code", "paragraph"]),
         difficulty: z.enum(["easy", "medium", "hard"]).optional(),
         duration: z.number().int().positive().optional(),
         period: z.enum(["all", "week", "month"]).default("all"),

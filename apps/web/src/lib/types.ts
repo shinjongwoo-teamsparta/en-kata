@@ -2,7 +2,6 @@ export type {
   GameMode,
   ShortCodeLanguage,
   Difficulty,
-  NamingConvention,
   WordCategory,
   GameStatus,
   GameSettings,

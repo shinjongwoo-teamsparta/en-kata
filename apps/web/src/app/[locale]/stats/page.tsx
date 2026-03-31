@@ -10,7 +10,7 @@ const MODE_LABELS: Record<string, string> = {
   word: "Word",
   phrase: "Phrase",
   code: "Code",
-  variableName: "Variable Name",
+  paragraph: "Paragraph",
 };
 
 function formatDate(date: Date | string) {

@@ -9,7 +9,6 @@ import codeData from "@en-kata/core/data/short-codes.json";
 import type {
   Difficulty,
   GameMode,
-  NamingConvention,
   ShortCodeLanguage,
   WordCategory,
 } from "~/lib/types";
@@ -19,7 +18,6 @@ import {
   DURATIONS,
   DIFFICULTIES,
   CATEGORY_IDS,
-  CONVENTION_IDS,
   MODES_WITHOUT_DIFFICULTY,
 } from "~/lib/constants";
 import { LeaderboardIcon } from "~/lib/icons";
@@ -28,7 +26,7 @@ import { useSettingsStore } from "~/stores/useSettingsStore";
 const LANGUAGE_IDS = Object.keys(codeData) as ShortCodeLanguage[];
 const LANGUAGE_META = codeData as Record<string, { label: string; icon: string; codes: string[] }>;
 
-type StepId = "mode" | "duration" | "difficulty" | "category" | "convention" | "language";
+type StepId = "mode" | "duration" | "difficulty" | "category" | "language";
 
 function getSteps(mode: GameMode): StepId[] {
   const steps: StepId[] = ["mode"];
@@ -37,9 +35,6 @@ function getSteps(mode: GameMode): StepId[] {
   }
   if (mode === "code") {
     steps.push("language");
-  }
-  if (mode === "variableName") {
-    steps.push("convention");
   }
   if (!MODES_WITHOUT_DIFFICULTY.has(mode)) {
     steps.push("difficulty");
@@ -117,11 +112,6 @@ export default function HomePage() {
     goNext();
   };
 
-  const selectConvention = (c: NamingConvention) => {
-    store.setConvention(c);
-    goNext();
-  };
-
   const selectLanguage = (l: ShortCodeLanguage) => {
     store.setLanguage(l);
     goNext();
@@ -146,8 +136,6 @@ export default function HomePage() {
         return DIFFICULTIES;
       case "category":
         return CATEGORY_IDS;
-      case "convention":
-        return CONVENTION_IDS;
       case "language":
         return LANGUAGE_IDS;
       default:
@@ -171,15 +159,12 @@ export default function HomePage() {
       case "category":
         idx = CATEGORY_IDS.indexOf(store.category);
         break;
-      case "convention":
-        idx = CONVENTION_IDS.indexOf(store.convention);
-        break;
       case "language":
         idx = LANGUAGE_IDS.indexOf(store.language);
         break;
     }
     setFocusIndex(idx >= 0 ? idx : 0);
-  }, [currentStep, store.mode, store.duration, store.difficulty, store.category, store.convention, store.language]);
+  }, [currentStep, store.mode, store.duration, store.difficulty, store.category, store.language]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -211,9 +196,6 @@ export default function HomePage() {
             break;
           case "category":
             selectCategory(CATEGORY_IDS[focusIndex] ?? "general");
-            break;
-          case "convention":
-            selectConvention(CONVENTION_IDS[focusIndex] ?? "camelCase");
             break;
           case "language":
             selectLanguage(LANGUAGE_IDS[focusIndex] ?? "typescript");
@@ -380,24 +362,6 @@ export default function HomePage() {
                         }`}
                     >
                       {t(`categories.${c}`)}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Convention step */}
-              {currentStep === "convention" && (
-                <div className="flex flex-wrap justify-center gap-3">
-                  {CONVENTION_IDS.map((c, i) => (
-                    <button
-                      key={c}
-                      onClick={() => selectConvention(c)}
-                      className={`rounded-lg border px-6 py-3 text-sm font-mono font-medium transition-all ${focusIndex === i
-                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
-                          : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                        }`}
-                    >
-                      {c}
                     </button>
                   ))}
                 </div>

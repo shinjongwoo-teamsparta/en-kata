@@ -4,7 +4,6 @@ export {
   DURATIONS,
   DIFFICULTIES,
   CATEGORY_IDS,
-  CONVENTION_IDS,
   MODES_WITHOUT_DIFFICULTY,
 } from "@en-kata/core";
 

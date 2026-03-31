@@ -1,1 +1,1 @@
-export { getWords, convertToConvention } from "@en-kata/core";
+export { getWords } from "@en-kata/core";

@@ -68,10 +68,9 @@ model GameResult {
     userId         String   @map("user_id")
     user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    mode           String   // word | phrase | code | variableName
+    mode           String   // word | phrase | code | paragraph
     difficulty     String   // easy | medium | hard
     duration       Int      // seconds
-    convention     String?  // camelCase | snake_case | kebab-case | PascalCase
     language       String?  // typescript | python
     category       String?  // general | frontend | backend | devops | database
 

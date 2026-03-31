@@ -23,7 +23,6 @@ export class TypingGameEngine {
     const words = getWords(
       settings.mode,
       settings.difficulty,
-      settings.convention,
       settings.category,
       settings.language,
     );
@@ -58,7 +57,6 @@ export class TypingGameEngine {
     const words = getWords(
       this.settings.mode,
       this.settings.difficulty,
-      this.settings.convention,
       this.settings.category,
       this.settings.language,
     );
@@ -192,7 +190,6 @@ export class TypingGameEngine {
         const moreWords = getWords(
           this.settings.mode,
           this.settings.difficulty,
-          this.settings.convention,
           this.settings.category,
           this.settings.language,
         );
@@ -239,7 +236,6 @@ export class TypingGameEngine {
       mode: this.settings.mode,
       difficulty: this.settings.difficulty,
       duration: elapsed,
-      convention: this.settings.convention,
       language: this.settings.language,
       category: this.settings.category,
       wpm: this.calculateWpm(this.state.correctChars, elapsed),

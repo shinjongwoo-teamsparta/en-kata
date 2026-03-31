@@ -5,7 +5,6 @@ import type {
   GameSettings,
   Difficulty,
   WordCategory,
-  NamingConvention,
   ShortCodeLanguage,
 } from "@en-kata/core";
 import {
@@ -14,7 +13,6 @@ import {
   DURATIONS,
   DIFFICULTIES,
   CATEGORY_IDS,
-  CONVENTION_IDS,
   LANGUAGE_IDS,
   MODES_WITHOUT_DIFFICULTY,
 } from "@en-kata/core";
@@ -28,8 +26,6 @@ function getSubLabel(mode: GameMode): string | null {
       return "Category";
     case "code":
       return "Language";
-    case "variableName":
-      return "Convention";
     default:
       return null;
   }
@@ -41,8 +37,6 @@ function getSubOptions(mode: GameMode): string[] {
       return [...CATEGORY_IDS];
     case "code":
       return [...LANGUAGE_IDS];
-    case "variableName":
-      return [...CONVENTION_IDS];
     default:
       return [];
   }
@@ -99,7 +93,6 @@ export function Menu({ onStart }: MenuProps) {
       duration: DURATIONS[durIdx] ?? 60,
       category: mode === "word" ? (subOptions[subIndex] as WordCategory) : undefined,
       language: mode === "code" ? (subOptions[subIndex] as ShortCodeLanguage) : undefined,
-      convention: mode === "variableName" ? (subOptions[subIndex] as NamingConvention) : undefined,
     };
     onStart(settings);
   }

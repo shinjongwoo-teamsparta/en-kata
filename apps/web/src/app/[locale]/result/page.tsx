@@ -106,9 +106,7 @@ function ResultContent() {
             {t("title")}
           </h1>
           <p className="mt-1 text-sm text-[var(--color-text-dim)]">
-            {result.mode}
-            {result.convention ? ` · ${result.convention}` : ""} ·{" "}
-            {result.difficulty} · {result.duration}s
+            {result.mode} · {result.difficulty} · {result.duration}s
           </p>
         </div>
 

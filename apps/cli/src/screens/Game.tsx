@@ -97,12 +97,6 @@ export function Game({ settings, onFinish, onQuit }: GameProps) {
               <Text dimColor>{settings.language}</Text>
             </>
           )}
-          {settings.convention && (
-            <>
-              <Text dimColor>·</Text>
-              <Text dimColor>{settings.convention}</Text>
-            </>
-          )}
         </Box>
         <Box gap={2}>
           <Text color="yellow" bold>
@@ -114,7 +108,7 @@ export function Game({ settings, onFinish, onQuit }: GameProps) {
         </Box>
       </Box>
 
-      {/* Display hint (for variableName mode) */}
+      {/* Display hint */}
       {showDisplay && (
         <Box marginBottom={1}>
           <Text dimColor>"{display}"</Text>
