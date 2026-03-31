@@ -19,7 +19,9 @@
       "code": "Code",
       "codeDesc": "Code snippets",
       "variableName": "Variable Name",
-      "variableNameDesc": "camel snake kebab Pascal"
+      "variableNameDesc": "camel snake kebab Pascal",
+      "paragraph": "Paragraph",
+      "paragraphDesc": "Long-form paragraph typing"
     },
     "difficulties": {
       "easy": "easy",
@@ -115,7 +117,8 @@
       "word": "Word",
       "phrase": "Phrase",
       "code": "Code",
-      "variableName": "Variable Name"
+      "variableName": "Variable Name",
+      "paragraph": "Paragraph"
     },
     "difficulty": "Difficulty",
     "difficulties": {

@@ -19,7 +19,9 @@
       "code": "코드",
       "codeDesc": "코드 스니펫",
       "variableName": "변수명",
-      "variableNameDesc": "camel snake kebab Pascal"
+      "variableNameDesc": "camel snake kebab Pascal",
+      "paragraph": "문단",
+      "paragraphDesc": "긴 문단 타이핑 연습"
     },
     "difficulties": {
       "easy": "쉬움",
@@ -115,7 +117,8 @@
       "word": "단어",
       "phrase": "문장",
       "code": "코드",
-      "variableName": "변수명"
+      "variableName": "변수명",
+      "paragraph": "문단"
     },
     "difficulty": "난이도",
     "difficulties": {

@@ -3,6 +3,7 @@ import phrasesData from "../data/phrases.json" with { type: "json" };
 import shortCodeData from "../data/short-codes.json" with { type: "json" };
 import namingData from "../data/naming-phrases.json" with { type: "json" };
 import phraseKoreanData from "../data/phrase-korean.json" with { type: "json" };
+import paragraphsData from "../data/paragraphs.json" with { type: "json" };
 import type {
   Difficulty,
   GameMode,
@@ -99,6 +100,11 @@ export function getWords(
         display: p,
         target: convertToConvention(p, conv),
       }));
+    }
+    case "paragraph": {
+      const paragraphs =
+        (paragraphsData as Record<string, string[]>)[difficulty] ?? [];
+      return shuffle(paragraphs).map((p) => ({ display: p, target: p }));
     }
   }
 }

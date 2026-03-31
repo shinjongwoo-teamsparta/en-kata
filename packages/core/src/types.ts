@@ -1,4 +1,4 @@
-export type GameMode = "word" | "phrase" | "code" | "variableName";
+export type GameMode = "word" | "phrase" | "code" | "variableName" | "paragraph";
 export type ShortCodeLanguage = "typescript" | "python" | "rust" | "go" | "sql" | "bash" | "c";
 export type Difficulty = "easy" | "medium" | "hard";
 export type NamingConvention = "camelCase" | "snake_case" | "kebab-case" | "PascalCase";

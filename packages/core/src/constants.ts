@@ -6,13 +6,14 @@ import type {
   WordCategory,
 } from "./types";
 
-export const MODE_IDS: GameMode[] = ["word", "phrase", "code", "variableName"];
+export const MODE_IDS: GameMode[] = ["word", "phrase", "code", "variableName", "paragraph"];
 
 export const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
   phrase: '""',
   code: "</>",
   variableName: "xY",
+  paragraph: "¶",
 };
 
 export const DURATIONS = [30, 60, 120];
