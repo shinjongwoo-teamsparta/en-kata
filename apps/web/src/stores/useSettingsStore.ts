@@ -26,7 +26,7 @@ export interface SettingsState {
   // Global toggles (set in SettingsModal)
   showKorean: boolean;
   backspaceLock: boolean;
-  canvasRenderer: boolean;
+  effect: boolean;
 
   // Per-mode cached preferences
   modePrefs: Partial<Record<GameMode, ModePrefs>>;
@@ -39,10 +39,10 @@ export interface SettingsState {
   setLanguage: (language: ShortCodeLanguage) => void;
   setShowKorean: (value: boolean) => void;
   setBackspaceLock: (value: boolean) => void;
-  setCanvasRenderer: (value: boolean) => void;
+  setEffect: (value: boolean) => void;
   toggleShowKorean: () => void;
   toggleBackspaceLock: () => void;
-  toggleCanvasRenderer: () => void;
+  toggleEffect: () => void;
 
   /** Save current selections as cached prefs for the active mode */
   saveModePrefs: () => void;
@@ -64,7 +64,7 @@ export const useSettingsStore = create<SettingsState>()(
       language: "typescript",
       showKorean: false,
       backspaceLock: false,
-      canvasRenderer: false,
+      effect: false,
       modePrefs: {},
 
       setMode: (mode) => set({ mode }),
@@ -74,12 +74,12 @@ export const useSettingsStore = create<SettingsState>()(
       setLanguage: (language) => set({ language }),
       setShowKorean: (value) => set({ showKorean: value }),
       setBackspaceLock: (value) => set({ backspaceLock: value }),
-      setCanvasRenderer: (value) => set({ canvasRenderer: value }),
+      setEffect: (value) => set({ effect: value }),
       toggleShowKorean: () => set((s) => ({ showKorean: !s.showKorean })),
       toggleBackspaceLock: () =>
         set((s) => ({ backspaceLock: !s.backspaceLock })),
-      toggleCanvasRenderer: () =>
-        set((s) => ({ canvasRenderer: !s.canvasRenderer })),
+      toggleEffect: () =>
+        set((s) => ({ effect: !s.effect })),
 
       saveModePrefs: () => {
         const { mode, duration, difficulty, category, language, modePrefs } = get();
@@ -118,6 +118,17 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: "en-kata-settings",
+      version: 1,
+      migrate: (persistedState: unknown, version: number) => {
+        const state = persistedState as Record<string, unknown>;
+        if (version === 0) {
+          if ("canvasRenderer" in state) {
+            state.effect = state.canvasRenderer;
+            delete state.canvasRenderer;
+          }
+        }
+        return state;
+      },
       partialize: (state) => ({
         mode: state.mode,
         duration: state.duration,
@@ -126,7 +137,7 @@ export const useSettingsStore = create<SettingsState>()(
         language: state.language,
         showKorean: state.showKorean,
         backspaceLock: state.backspaceLock,
-        canvasRenderer: state.canvasRenderer,
+        effect: state.effect,
         modePrefs: state.modePrefs,
       }),
     },

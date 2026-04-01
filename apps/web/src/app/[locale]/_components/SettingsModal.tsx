@@ -32,8 +32,10 @@ export function SettingsModal() {
 
   const showKorean = useSettingsStore((s) => s.showKorean);
   const backspaceLock = useSettingsStore((s) => s.backspaceLock);
+  const effect = useSettingsStore((s) => s.effect);
   const toggleKorean = useSettingsStore((s) => s.toggleShowKorean);
   const toggleBackspaceLock = useSettingsStore((s) => s.toggleBackspaceLock);
+  const toggleEffect = useSettingsStore((s) => s.toggleEffect);
 
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -189,6 +191,32 @@ export function SettingsModal() {
                     <span
                       className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
                         backspaceLock ? "translate-x-4" : "translate-x-0"
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {/* Effect */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="text-xs text-[var(--color-text-dim)]">
+                      {t("effect")}
+                    </label>
+                    <p className="text-[10px] text-[var(--color-text-dim)] opacity-60">
+                      {t("effectDesc")}
+                    </p>
+                  </div>
+                  <button
+                    onClick={toggleEffect}
+                    className={`shrink-0 relative h-6 w-10 rounded-full transition-colors ${
+                      effect
+                        ? "bg-[var(--color-primary)]"
+                        : "bg-[var(--color-border)]"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
+                        effect ? "translate-x-4" : "translate-x-0"
                       }`}
                     />
                   </button>
