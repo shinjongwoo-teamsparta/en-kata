@@ -32,6 +32,7 @@ export default function CanvasTypingArea({
   const rendererRef = useRef<CanvasRenderer | null>(null);
   const prevCharIndex = useRef(0);
   const prevCompletedWords = useRef(0);
+  const hadTypoInWord = useRef(false);
 
   // Initialize renderer
   useEffect(() => {
@@ -106,6 +107,7 @@ export default function CanvasTypingArea({
         onCorrectKey?.();
       } else if (charStates[lastTypedIndex] === "incorrect") {
         renderer.onIncorrectKey();
+        hadTypoInWord.current = true;
         onIncorrectKey?.();
       }
     }
@@ -118,8 +120,9 @@ export default function CanvasTypingArea({
     if (completedWords > prevCompletedWords.current) {
       const renderer = rendererRef.current;
       if (renderer) {
-        renderer.onWordComplete();
+        renderer.onWordComplete(!hadTypoInWord.current);
       }
+      hadTypoInWord.current = false;
       onWordComplete?.();
     }
     prevCompletedWords.current = completedWords;

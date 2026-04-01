@@ -206,11 +206,13 @@ export class CanvasRenderer {
     }
   }
 
-  onWordComplete() {
+  onWordComplete(perfect: boolean) {
     if (!this.effectEnabled) return;
     this.glow.screenFlash(this.colors.primary);
 
-    // Burst from progress bar's current fill endpoint
+    if (!perfect) return;
+
+    // Burst from progress bar's current fill endpoint (only on perfect words)
     const barY = this.height - 3 - 8;
     const barWidth = this.width - PADDING * 2;
     const cx = PADDING + barWidth * this.displayProgress;
