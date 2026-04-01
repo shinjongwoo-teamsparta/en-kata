@@ -5,7 +5,6 @@
     "mode": "mode",
     "duration": "duration",
     "difficulty": "difficulty",
-    "category": "category",
     "convention": "convention",
     "showKorean": "Korean Translation",
     "showKoreanDesc": "Show Korean translation for each phrase",
@@ -30,13 +29,6 @@
     "languages": {
       "typescript": "TypeScript",
       "python": "Python"
-    },
-    "categories": {
-      "general": "General",
-      "frontend": "Frontend",
-      "backend": "Backend",
-      "devops": "DevOps",
-      "database": "Database"
     }
   },
   "play": {

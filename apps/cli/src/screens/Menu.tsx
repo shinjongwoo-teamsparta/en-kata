@@ -4,7 +4,6 @@ import type {
   GameMode,
   GameSettings,
   Difficulty,
-  WordCategory,
   ShortCodeLanguage,
 } from "@en-kata/core";
 import {
@@ -12,7 +11,6 @@ import {
   MODE_ICONS,
   DURATIONS,
   DIFFICULTIES,
-  CATEGORY_IDS,
   LANGUAGE_IDS,
   MODES_WITHOUT_DIFFICULTY,
 } from "@en-kata/core";
@@ -22,8 +20,6 @@ type Step = "mode" | "sub" | "difficulty" | "duration";
 
 function getSubLabel(mode: GameMode): string | null {
   switch (mode) {
-    case "word":
-      return "Category";
     case "code":
       return "Language";
     default:
@@ -33,8 +29,6 @@ function getSubLabel(mode: GameMode): string | null {
 
 function getSubOptions(mode: GameMode): string[] {
   switch (mode) {
-    case "word":
-      return [...CATEGORY_IDS];
     case "code":
       return [...LANGUAGE_IDS];
     default:
@@ -91,7 +85,6 @@ export function Menu({ onStart }: MenuProps) {
       mode,
       difficulty,
       duration: DURATIONS[durIdx] ?? 60,
-      category: mode === "word" ? (subOptions[subIndex] as WordCategory) : undefined,
       language: mode === "code" ? (subOptions[subIndex] as ShortCodeLanguage) : undefined,
     };
     onStart(settings);

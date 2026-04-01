@@ -5,13 +5,11 @@ import type {
   GameMode,
   GameSettings,
   ShortCodeLanguage,
-  WordCategory,
 } from "~/lib/types";
 
 interface ModePrefs {
   duration?: number;
   difficulty?: Difficulty;
-  category?: WordCategory;
   language?: ShortCodeLanguage;
 }
 
@@ -20,7 +18,6 @@ export interface SettingsState {
   mode: GameMode;
   duration: number;
   difficulty: Difficulty;
-  category: WordCategory;
   language: ShortCodeLanguage;
 
   // Global toggles (set in SettingsModal)
@@ -35,7 +32,6 @@ export interface SettingsState {
   setMode: (mode: GameMode) => void;
   setDuration: (duration: number) => void;
   setDifficulty: (difficulty: Difficulty) => void;
-  setCategory: (category: WordCategory) => void;
   setLanguage: (language: ShortCodeLanguage) => void;
   setShowKorean: (value: boolean) => void;
   setBackspaceLock: (value: boolean) => void;
@@ -60,7 +56,6 @@ export const useSettingsStore = create<SettingsState>()(
       mode: "word",
       duration: 60,
       difficulty: "medium",
-      category: "general",
       language: "typescript",
       showKorean: false,
       backspaceLock: false,
@@ -70,7 +65,6 @@ export const useSettingsStore = create<SettingsState>()(
       setMode: (mode) => set({ mode }),
       setDuration: (duration) => set({ duration }),
       setDifficulty: (difficulty) => set({ difficulty }),
-      setCategory: (category) => set({ category }),
       setLanguage: (language) => set({ language }),
       setShowKorean: (value) => set({ showKorean: value }),
       setBackspaceLock: (value) => set({ backspaceLock: value }),
@@ -82,11 +76,11 @@ export const useSettingsStore = create<SettingsState>()(
         set((s) => ({ effect: !s.effect })),
 
       saveModePrefs: () => {
-        const { mode, duration, difficulty, category, language, modePrefs } = get();
+        const { mode, duration, difficulty, language, modePrefs } = get();
         set({
           modePrefs: {
             ...modePrefs,
-            [mode]: { duration, difficulty, category, language },
+            [mode]: { duration, difficulty, language },
           },
         });
       },
@@ -97,7 +91,6 @@ export const useSettingsStore = create<SettingsState>()(
           set({
             ...(prefs.duration != null && { duration: prefs.duration }),
             ...(prefs.difficulty != null && { difficulty: prefs.difficulty }),
-            ...(prefs.category != null && { category: prefs.category }),
             ...(prefs.language != null && { language: prefs.language }),
           });
         }
@@ -109,7 +102,6 @@ export const useSettingsStore = create<SettingsState>()(
           mode: s.mode,
           duration: s.duration,
           difficulty: s.difficulty,
-          category: s.mode === "word" ? s.category : undefined,
           language: s.mode === "code" ? s.language : undefined,
           showKorean: s.mode === "phrase" ? s.showKorean : false,
           backspaceLock: s.backspaceLock,
@@ -133,7 +125,6 @@ export const useSettingsStore = create<SettingsState>()(
         mode: state.mode,
         duration: state.duration,
         difficulty: state.difficulty,
-        category: state.category,
         language: state.language,
         showKorean: state.showKorean,
         backspaceLock: state.backspaceLock,

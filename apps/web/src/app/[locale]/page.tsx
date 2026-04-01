@@ -10,14 +10,12 @@ import type {
   Difficulty,
   GameMode,
   ShortCodeLanguage,
-  WordCategory,
 } from "~/lib/types";
 import {
   MODE_IDS,
   MODE_ICONS,
   DURATIONS,
   DIFFICULTIES,
-  CATEGORY_IDS,
   MODES_WITHOUT_DIFFICULTY,
 } from "~/lib/constants";
 import { LeaderboardIcon } from "~/lib/icons";
@@ -26,13 +24,10 @@ import { useSettingsStore } from "~/stores/useSettingsStore";
 const LANGUAGE_IDS = Object.keys(codeData) as ShortCodeLanguage[];
 const LANGUAGE_META = codeData as Record<string, { label: string; icon: string; codes: string[] }>;
 
-type StepId = "mode" | "duration" | "difficulty" | "category" | "language";
+type StepId = "mode" | "duration" | "difficulty" | "language";
 
 function getSteps(mode: GameMode): StepId[] {
   const steps: StepId[] = ["mode"];
-  if (mode === "word") {
-    steps.push("category");
-  }
   if (mode === "code") {
     steps.push("language");
   }
@@ -107,11 +102,6 @@ export default function HomePage() {
     goNext();
   };
 
-  const selectCategory = (c: WordCategory) => {
-    store.setCategory(c);
-    goNext();
-  };
-
   const selectLanguage = (l: ShortCodeLanguage) => {
     store.setLanguage(l);
     goNext();
@@ -134,8 +124,6 @@ export default function HomePage() {
         return DURATIONS;
       case "difficulty":
         return DIFFICULTIES;
-      case "category":
-        return CATEGORY_IDS;
       case "language":
         return LANGUAGE_IDS;
       default:
@@ -156,15 +144,12 @@ export default function HomePage() {
       case "difficulty":
         idx = DIFFICULTIES.indexOf(store.difficulty);
         break;
-      case "category":
-        idx = CATEGORY_IDS.indexOf(store.category);
-        break;
       case "language":
         idx = LANGUAGE_IDS.indexOf(store.language);
         break;
     }
     setFocusIndex(idx >= 0 ? idx : 0);
-  }, [currentStep, store.mode, store.duration, store.difficulty, store.category, store.language]);
+  }, [currentStep, store.mode, store.duration, store.difficulty, store.language]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -193,9 +178,6 @@ export default function HomePage() {
             break;
           case "difficulty":
             selectDifficulty(DIFFICULTIES[focusIndex] ?? "medium");
-            break;
-          case "category":
-            selectCategory(CATEGORY_IDS[focusIndex] ?? "general");
             break;
           case "language":
             selectLanguage(LANGUAGE_IDS[focusIndex] ?? "typescript");
@@ -344,24 +326,6 @@ export default function HomePage() {
                         }`}
                     >
                       {t(`difficulties.${d}`)}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Category step */}
-              {currentStep === "category" && (
-                <div className="flex flex-wrap justify-center gap-3">
-                  {CATEGORY_IDS.map((c, i) => (
-                    <button
-                      key={c}
-                      onClick={() => selectCategory(c)}
-                      className={`rounded-lg border px-6 py-3 text-sm font-medium transition-all ${focusIndex === i
-                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-2 ring-[var(--color-primary)]"
-                          : "border-[var(--color-border)] text-[var(--color-text-dim)] hover:border-[var(--color-text-dim)] hover:bg-[var(--color-bg-hover)]"
-                        }`}
-                    >
-                      {t(`categories.${c}`)}
                     </button>
                   ))}
                 </div>

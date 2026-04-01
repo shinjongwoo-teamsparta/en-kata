@@ -7,7 +7,6 @@ import type {
   Difficulty,
   GameMode,
   ShortCodeLanguage,
-  WordCategory,
   WordItem,
 } from "./types";
 
@@ -25,16 +24,14 @@ function shuffle<T>(arr: T[]): T[] {
 export function getWords(
   mode: GameMode,
   difficulty: Difficulty,
-  category?: WordCategory,
   language?: ShortCodeLanguage,
 ): WordItem[] {
   switch (mode) {
     case "word": {
-      const cat = category ?? "general";
-      const words =
-        (wordsData as Record<string, Record<string, string[]>>)[cat]?.[
-          difficulty
-        ] ?? [];
+      const data = wordsData as Record<string, Record<string, string[]>>;
+      const words = Object.values(data).flatMap(
+        (cat) => cat[difficulty] ?? [],
+      );
       return shuffle(words).map((w) => ({
         display: w,
         target: w,

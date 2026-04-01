@@ -16,9 +16,6 @@ export const gameResultRouter = createTRPCRouter({
         difficulty: z.enum(["easy", "medium", "hard"]),
         duration: z.number().int().positive(),
         language: z.enum(shortCodeLanguages).optional(),
-        category: z
-          .enum(["general", "frontend", "backend", "devops", "database"])
-          .optional(),
         wpm: z.number().int().min(0),
         cpm: z.number().int().min(0),
         accuracy: z.number().min(0).max(100),

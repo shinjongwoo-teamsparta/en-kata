@@ -2,14 +2,12 @@ export type GameMode = "word" | "phrase" | "code" | "paragraph";
 export type ShortCodeLanguage = "typescript" | "python" | "rust" | "go" | "sql" | "bash" | "c";
 export type Difficulty = "easy" | "medium" | "hard";
 
-export type WordCategory = "general" | "frontend" | "backend" | "devops" | "database";
 export type GameStatus = "idle" | "playing" | "finished";
 
 export interface GameSettings {
   mode: GameMode;
   difficulty: Difficulty;
   duration: number; // seconds
-  category?: WordCategory;
   language?: ShortCodeLanguage;
   showKorean?: boolean;
   backspaceLock?: boolean;
@@ -20,7 +18,6 @@ export interface GameResult {
   difficulty: Difficulty;
   duration: number;
   language?: ShortCodeLanguage;
-  category?: WordCategory;
   wpm: number;
   cpm: number;
   accuracy: number;

@@ -5,7 +5,6 @@
     "mode": "모드",
     "duration": "시간",
     "difficulty": "난이도",
-    "category": "카테고리",
     "convention": "네이밍 규칙",
     "showKorean": "한국어 번역",
     "showKoreanDesc": "각 문장의 한국어 번역을 표시합니다",
@@ -30,13 +29,6 @@
     "languages": {
       "typescript": "TypeScript",
       "python": "Python"
-    },
-    "categories": {
-      "general": "일반",
-      "frontend": "프론트엔드",
-      "backend": "백엔드",
-      "devops": "DevOps",
-      "database": "데이터베이스"
     }
   },
   "play": {

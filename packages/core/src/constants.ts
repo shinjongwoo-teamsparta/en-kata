@@ -2,10 +2,9 @@ import type {
   Difficulty,
   GameMode,
   ShortCodeLanguage,
-  WordCategory,
 } from "./types";
 
-export const MODE_IDS: GameMode[] = ["word", "phrase", "code", "paragraph"];
+export const MODE_IDS: GameMode[] = ["word", "phrase", "paragraph", "code"];
 
 export const MODE_ICONS: Record<GameMode, string> = {
   word: "Aa",
@@ -17,14 +16,6 @@ export const MODE_ICONS: Record<GameMode, string> = {
 export const DURATIONS = [30, 60, 120];
 
 export const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
-
-export const CATEGORY_IDS: WordCategory[] = [
-  "general",
-  "frontend",
-  "backend",
-  "devops",
-  "database",
-];
 
 export const LANGUAGE_IDS: ShortCodeLanguage[] = [
   "typescript",

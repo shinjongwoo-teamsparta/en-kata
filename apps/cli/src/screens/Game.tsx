@@ -85,12 +85,6 @@ export function Game({ settings, onFinish, onQuit }: GameProps) {
           </Text>
           <Text dimColor>·</Text>
           <Text dimColor>{settings.difficulty}</Text>
-          {settings.category && (
-            <>
-              <Text dimColor>·</Text>
-              <Text dimColor>{settings.category}</Text>
-            </>
-          )}
           {settings.language && (
             <>
               <Text dimColor>·</Text>

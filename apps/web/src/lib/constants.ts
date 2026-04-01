@@ -3,7 +3,6 @@ export {
   MODE_ICONS,
   DURATIONS,
   DIFFICULTIES,
-  CATEGORY_IDS,
   MODES_WITHOUT_DIFFICULTY,
 } from "@en-kata/core";
 
