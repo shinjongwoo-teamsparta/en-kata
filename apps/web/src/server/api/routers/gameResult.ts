@@ -5,6 +5,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { kysely } from "~/server/db";
 
 const shortCodeLanguages = Object.keys(shortCodeData) as [string, ...string[]];
 
@@ -116,54 +117,55 @@ export const gameResultRouter = createTRPCRouter({
         limit: z.number().int().min(1).max(50).default(20),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      const where: Record<string, unknown> = { mode: input.mode };
+    .query(async ({ input }) => {
+      // Best WPM per user via DISTINCT ON, sorted and limited in DB
+      let query = kysely
+        .selectFrom("game_results as gr")
+        .innerJoin("users as u", "u.id", "gr.user_id")
+        .where("gr.mode", "=", input.mode)
+        .distinctOn("gr.user_id")
+        .orderBy("gr.user_id")
+        .orderBy("gr.wpm", "desc")
+        .select([
+          "gr.id",
+          "gr.user_id as userId",
+          "gr.wpm",
+          "gr.cpm",
+          "gr.accuracy",
+          "gr.completed_words as completedWords",
+          "gr.duration",
+          "gr.difficulty",
+          "gr.created_at as createdAt",
+          "u.name as userName",
+          "u.image as userImage",
+        ]);
 
-      if (input.difficulty) where.difficulty = input.difficulty;
-      if (input.duration) where.duration = input.duration;
-
+      if (input.difficulty) {
+        query = query.where("gr.difficulty", "=", input.difficulty);
+      }
+      if (input.duration) {
+        query = query.where("gr.duration", "=", input.duration);
+      }
       if (input.period !== "all") {
         const since = new Date();
         if (input.period === "week") since.setDate(since.getDate() - 7);
         else since.setDate(since.getDate() - 30);
-        where.createdAt = { gte: since };
+        query = query.where("gr.created_at", ">=", since);
       }
 
-      // Get best WPM per user for this filter, then rank
-      const results = await ctx.db.gameResult.findMany({
-        where,
-        orderBy: { wpm: "desc" },
-        select: {
-          id: true,
-          userId: true,
-          wpm: true,
-          cpm: true,
-          accuracy: true,
-          completedWords: true,
-          duration: true,
-          difficulty: true,
-          createdAt: true,
-          user: {
-            select: { name: true, image: true },
-          },
-        },
-      });
-
-      // Keep only best score per user
-      const seen = new Set<string>();
-      const ranked = [];
-      for (const r of results) {
-        if (seen.has(r.userId)) continue;
-        seen.add(r.userId);
-        ranked.push(r);
-        if (ranked.length >= input.limit) break;
-      }
+      // Wrap to re-sort by wpm DESC and apply limit
+      const ranked = await kysely
+        .selectFrom(query.as("best"))
+        .selectAll()
+        .orderBy("wpm", "desc")
+        .limit(input.limit)
+        .execute();
 
       return ranked.map((r, i) => ({
         rank: i + 1,
         userId: r.userId,
-        userName: r.user.name ?? "Anonymous",
-        userImage: r.user.image,
+        userName: r.userName ?? "Anonymous",
+        userImage: r.userImage,
         wpm: r.wpm,
         cpm: r.cpm,
         accuracy: r.accuracy,
