@@ -32,7 +32,7 @@
   --theme-text-bright: #1e1e2e;
   --theme-primary: #1e66f5;
   --theme-primary-hover: #209fb5;
-  --theme-correct: #40a02b;
+  --theme-correct: #1e66f5;
   --theme-incorrect: #d20f39;
   --theme-cursor: #dc8a78;
   --theme-accent: #8839ef;
@@ -50,7 +50,7 @@
   --theme-text-bright: #f5f5f5;
   --theme-primary: #89b4fa;
   --theme-primary-hover: #74c7ec;
-  --theme-correct: #a6e3a1;
+  --theme-correct: #89b4fa;
   --theme-incorrect: #f38ba8;
   --theme-cursor: #f5e0dc;
   --theme-accent: #cba6f7;

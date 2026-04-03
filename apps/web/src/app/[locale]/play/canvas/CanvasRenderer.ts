@@ -81,7 +81,7 @@ export class CanvasRenderer {
     return {
       bg: get("--color-bg") || "#1e1e2e",
       bgSurface: get("--color-bg-surface") || "#313244",
-      correct: get("--color-correct") || "#a6e3a1",
+      correct: get("--color-correct") || "#89b4fa",
       incorrect: get("--color-incorrect") || "#f38ba8",
       textDim: get("--color-text-dim") || "#6c7086",
       textBright: get("--color-text-bright") || "#cdd6f4",
@@ -208,10 +208,9 @@ export class CanvasRenderer {
 
   onWordComplete(perfect: boolean) {
     if (!this.effectEnabled) return;
-    this.glow.screenFlash(this.colors.primary);
-
     if (!perfect) return;
 
+    this.glow.screenFlash(this.colors.primary);
     // Burst from progress bar's current fill endpoint (only on perfect words)
     const barY = this.height - 3 - 8;
     const barWidth = this.width - PADDING * 2;
